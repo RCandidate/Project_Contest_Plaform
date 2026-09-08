@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto grid gap-8 px-4 py-12 md:grid-cols-5">
+      <div className="container mx-auto grid gap-8 px-4 py-12 md:grid-cols-4">
         <div>
           <h3 className="mb-3 text-lg font-bold">
             <span className="text-accent">СочиГУ</span> | Конкурс проектов
@@ -28,14 +28,6 @@ export function Footer() {
             <li><Link to="/winners" className="hover:text-primary-foreground">Победители</Link></li>
             <li><Link to="/register" className="hover:text-primary-foreground">Регистрация</Link></li>
             <li><Link to="/login" className="hover:text-primary-foreground">Войти</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="mb-3 font-semibold">Партнёры</h4>
-          <ul className="space-y-2 text-base text-primary-foreground/70">
-            <li><a href="https://nti2035.ru/" target="_blank" rel="noopener noreferrer" className="hover:text-primary-foreground">НТИ 2035</a></li>
-            <li><a href="https://rmpvo.ru/feedback/events/for_students.php" target="_blank" rel="noopener noreferrer" className="hover:text-primary-foreground">РМПВО</a></li>
-            <li><a href="https://www.fasie.ru/" target="_blank" rel="noopener noreferrer" className="hover:text-primary-foreground">ФАСИЕ</a></li>
           </ul>
         </div>
         <div>

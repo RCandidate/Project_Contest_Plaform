@@ -110,8 +110,8 @@ export function ContactsPage() {
                   icon: Mail,
                   title: "Email",
                   content: (
-                    <a href="mailto:info@sutr.ru" className="text-primary hover:underline">
-                      info@sutr.ru
+                    <a href="mailto:startup@sutr.ru"  className="text-primary hover:underline">
+                       startup@sutr.ru
                     </a>
                   ),
                 },
@@ -119,9 +119,8 @@ export function ContactsPage() {
                   icon: Globe,
                   title: "Сайт конкурса",
                   content: (
-                    <a href="https://PROJECT-Sochigu.sutr.ru" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                      PROJECT-Sochigu.sutr.ru
-                    </a>
+                    <a href="https://PROJECT-Sochigu.sochi.university" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      PROJECT-Sochigu.sochi.university                    </a>
                   ),
                 },
               ].map(({ icon: Icon, title, content }) => (
