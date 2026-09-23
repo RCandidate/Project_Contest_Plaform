@@ -9,9 +9,15 @@ import { fadeUp, fadeUpView, fadeIn, staggerView, cardItem, hoverCard, hoverBtn 
 
 import mascot from '../../../mascot-removebg-preview.png';
 import photosyrkova from '../../../assets/tutor-syrk.jpg';
-import photofesenko from '../../../assets/tutor-fes.jpg';
 import photovidisheva from '../../../assets/tutor-vid.jpg';
 import photopotasheva from '../../../assets/tutor-pot.jpg';
+import photodrach from '../../../assets/Drach_VE.jpg';
+import photodavydovich from '../../../assets/Davydovich_AN.jpg';
+import photohachemizova from '../../../assets/Hachemizova_EN.jpg';
+import photokopyrin from '../../../assets/Kopyrin_AS.jpg';
+import photopodoplelova from '../../../assets/Podoplelova_VA.jpg';
+import photoserdukova from '../../../assets/Serdukova_NK.jpg';
+import phototabak from '../../../assets/Tabak_LV.jpg';
 
 
 const MotionLink = motion(Link);
@@ -139,177 +145,205 @@ export function HomePage() {
           whileInView="show"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {/* 1. Давыдович Анна Рудольфовна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/davydovich.jpg" alt="Давыдович А.Р." className="h-full w-full object-cover" /> */}
-              ДА
+        {/* 1. Давыдович Анна Рудольфовна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={photodavydovich} alt="Давыдович А.Р." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Давыдович Анна Рудольфовна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. директора института туризма, гостеприимства и креативных индустрий</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Давыдович Анна Рудольфовна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. директора института туризма, гостеприимства и креативных индустрий</p>
+          </div>
+        </motion.div>
 
-          {/* 2. Копырин Андрей Сергеевич */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/kopyrin.jpg" alt="Копырин А.С." className="h-full w-full object-cover" /> */}
-              КА
+        {/* 2. Копырин Андрей Сергеевич */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={photokopyrin} alt="Копырин А.С." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Копырин Андрей Сергеевич</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой информационных технологий и математики</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Копырин Андрей Сергеевич</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой информационных технологий и математики</p>
+          </div>
+        </motion.div>
 
-          {/* 3. Табак Лариса Владимировна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/tabak.jpg" alt="Табак Л.В." className="h-full w-full object-cover" /> */}
-              ТЛ
+        {/* 3. Табак Лариса Владимировна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={phototabak} alt="Табак Л.В." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Табак Лариса Владимировна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой архитектуры, дизайна и экологии</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Табак Лариса Владимировна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой архитектуры, дизайна и экологии</p>
+          </div>
+        </motion.div>
 
-          {/* 4. Сыркова Ирина Сергеевна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+        {/* 4. Сыркова Ирина Сергеевна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
               <img src={photosyrkova} alt="Сыркова И.С." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Сыркова Ирина Сергеевна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой управления и технологий в туризме и рекреации</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Сыркова Ирина Сергеевна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой управления и технологий в туризме и рекреации</p>
+          </div>
+        </motion.div>
 
-          {/* 5. Сердюкова Надежда Константиновна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/serdyukova.jpg" alt="Сердюкова Н.К." className="h-full w-full object-cover" /> */}
-              СН
+        {/* 5. Сердюкова Надежда Константиновна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={photoserdukova} alt="Сердюкова Н.К." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Сердюкова Надежда Константиновна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Заведующий кафедрой гостиничного и ресторанного бизнеса</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Сердюкова Надежда Константиновна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">Заведующий кафедрой гостиничного и ресторанного бизнеса</p>
+          </div>
+        </motion.div>
 
-          {/* 6. Видищева Евгения Владимировна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+        {/* 6. Видищева Евгения Владимировна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
               <img src={photovidisheva} alt="Видищева Е.В." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Видищева Евгения Владимировна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Видищева Евгения Владимировна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
+          </div>
+        </motion.div>
 
-          {/* 7. Драч Владимир Евгеньевич */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/drach.jpg" alt="Драч В.Е." className="h-full w-full object-cover" /> */}
-              ДВ
+        {/* 7. Драч Владимир Евгеньевич */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={photodrach} alt="Драч В.Е." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Драч Владимир Евгеньевич</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Драч Владимир Евгеньевич</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
+          </div>
+        </motion.div>
 
-          {/* 8. Хачемизова Екатерина Николаевна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/khachemizova.jpg" alt="Хачемизова Е.Н." className="h-full w-full object-cover" /> */}
-              ХЕ
+        {/* 8. Хачемизова Екатерина Николаевна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+              <img src={photohachemizova} alt="Хачемизова Е.Н." className="h-full w-full object-cover" />
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Хачемизова Екатерина Николаевна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Хачемизова Екатерина Николаевна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
+          </div>
+        </motion.div>
 
-          {/* 9. Поташова Ирина Юрьевна */}
-          <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
-            variants={cardItem}
-            {...hoverCard}
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+        {/* 9. Поташова Ирина Юрьевна */}
+        <motion.div
+          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          variants={cardItem}
+          {...hoverCard}
+        >
+          <div className="relative h-16 w-16 shrink-0">
+            <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
               <img src={photopotasheva} alt="Поташова И.Ю." className="h-full w-full object-cover" />
-        
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Поташова Ирина Юрьевна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
-            </div>
-          </motion.div>
+          </div>
+          <div className="min-w-0 relative z-10">
+            <p className="font-semibold text-foreground leading-snug">Поташова Ирина Юрьевна</p>
+            <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
+          </div>
+        </motion.div>
 
           {/* 10. Балабанова Анна Олеговна */}
           <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
             variants={cardItem}
             {...hoverCard}
           >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/balabanova.jpg" alt="Балабанова А.О." className="h-full w-full object-cover" /> */}
-              БА
+            <div className="relative h-16 w-16 shrink-0">
+              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25 group-hover:bg-primary group-hover:text-white">
+                БА
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Балабанова Анна Олеговна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Старший преподаватель кафедры инновационных технологий в экономике и управлении</p>
+
+            <div className="min-w-0 relative z-10">
+              <p className="font-semibold text-foreground leading-snug">
+                Балабанова Анна Олеговна
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">
+                Старший преподаватель кафедры инновационных технологий в экономике и управлении
+              </p>
             </div>
           </motion.div>
 
           {/* 11. Подоплелова Валерия Анатольевна */}
           <motion.div
-            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:primary/25 hover:shadow-md sm:col-span-2 sm:w-[calc(50%-0.625rem)] sm:justify-self-center"
+            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md sm:col-span-2 sm:w-[calc(50%-0.625rem)] sm:justify-self-center"
             variants={cardItem}
             {...hoverCard}
           >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
-              {/* <img src="/path/to/podoplelova.jpg" alt="Подоплелова В.А." className="h-full w-full object-cover" /> */}
-              ПВ
+
+            <div className="relative h-16 w-16 shrink-0">
+              <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+                <img
+                  src={photopodoplelova}
+                  alt="Подоплелова В.А."
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-foreground leading-snug">Подоплелова Валерия Анатольевна</p>
-              <p className="mt-1 text-sm text-muted-foreground leading-snug">Старший преподаватель кафедры архитектуры, дизайна и экологии</p>
+
+            <div className="min-w-0 relative z-10">
+              <p className="font-semibold text-foreground leading-snug">
+                Подоплелова Валерия Анатольевна
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">
+                Старший преподаватель кафедры архитектуры, дизайна и экологии
+              </p>
             </div>
           </motion.div>
         </motion.div>
