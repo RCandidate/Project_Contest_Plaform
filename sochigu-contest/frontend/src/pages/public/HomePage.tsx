@@ -3,9 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuthStore } from '@/store/auth.store';
 import { useUiStore } from '@/store/ui.store';
-import mascot from '../../../mascot-removebg-preview.png';
 import { GraduationCap, Users, Gift, Trophy, ArrowRight, Calendar, CheckCircle, Presentation, Award } from "lucide-react";
 import { fadeUp, fadeUpView, fadeIn, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
+
+
+import mascot from '../../../mascot-removebg-preview.png';
+import photosyrkova from '../../../assets/tutor-syrk.jpg';
+import photofesenko from '../../../assets/tutor-fes.jpg';
+import photovidisheva from '../../../assets/tutor-vid.jpg';
+import photopotasheva from '../../../assets/tutor-pot.jpg';
+
 
 const MotionLink = motion(Link);
 
@@ -107,6 +114,204 @@ export function HomePage() {
               </div>
             </motion.div>
           ))}
+        </motion.div>
+      </section>
+
+      {/* ── Экспертный совет ── */}
+      <section className="container mx-auto px-4 py-16">
+        <motion.h2
+          className="mb-3 text-center text-3xl font-bold text-foreground"
+          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0} variants={fadeUpView}
+        >
+          Экспертный совет
+        </motion.h2>
+        <motion.p
+          className="mb-10 text-center text-muted-foreground max-w-2xl mx-auto"
+          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0.1} variants={fadeUpView}
+        >
+          Преподаватели и руководители кафедр СочиГУ, оценивающие проекты участников
+        </motion.p>
+
+        <motion.div
+          className="grid gap-5 sm:grid-cols-2 max-w-4xl mx-auto"
+          variants={staggerView}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+        >
+          {/* 1. Давыдович Анна Рудольфовна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/davydovich.jpg" alt="Давыдович А.Р." className="h-full w-full object-cover" /> */}
+              ДА
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Давыдович Анна Рудольфовна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. директора института туризма, гостеприимства и креативных индустрий</p>
+            </div>
+          </motion.div>
+
+          {/* 2. Копырин Андрей Сергеевич */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/kopyrin.jpg" alt="Копырин А.С." className="h-full w-full object-cover" /> */}
+              КА
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Копырин Андрей Сергеевич</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой информационных технологий и математики</p>
+            </div>
+          </motion.div>
+
+          {/* 3. Табак Лариса Владимировна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/tabak.jpg" alt="Табак Л.В." className="h-full w-full object-cover" /> */}
+              ТЛ
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Табак Лариса Владимировна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой архитектуры, дизайна и экологии</p>
+            </div>
+          </motion.div>
+
+          {/* 4. Сыркова Ирина Сергеевна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              <img src={photosyrkova} alt="Сыркова И.С." className="h-full w-full object-cover" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Сыркова Ирина Сергеевна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">И.о. заведующего кафедрой управления и технологий в туризме и рекреации</p>
+            </div>
+          </motion.div>
+
+          {/* 5. Сердюкова Надежда Константиновна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/serdyukova.jpg" alt="Сердюкова Н.К." className="h-full w-full object-cover" /> */}
+              СН
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Сердюкова Надежда Константиновна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Заведующий кафедрой гостиничного и ресторанного бизнеса</p>
+            </div>
+          </motion.div>
+
+          {/* 6. Видищева Евгения Владимировна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              <img src={photovidisheva} alt="Видищева Е.В." className="h-full w-full object-cover" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Видищева Евгения Владимировна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
+            </div>
+          </motion.div>
+
+          {/* 7. Драч Владимир Евгеньевич */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/drach.jpg" alt="Драч В.Е." className="h-full w-full object-cover" /> */}
+              ДВ
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Драч Владимир Евгеньевич</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры информационных технологий и математики</p>
+            </div>
+          </motion.div>
+
+          {/* 8. Хачемизова Екатерина Николаевна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/khachemizova.jpg" alt="Хачемизова Е.Н." className="h-full w-full object-cover" /> */}
+              ХЕ
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Хачемизова Екатерина Николаевна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
+            </div>
+          </motion.div>
+
+          {/* 9. Поташова Ирина Юрьевна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              <img src={photopotasheva} alt="Поташова И.Ю." className="h-full w-full object-cover" />
+        
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Поташова Ирина Юрьевна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Доцент кафедры инновационных технологий в экономике и управлении</p>
+            </div>
+          </motion.div>
+
+          {/* 10. Балабанова Анна Олеговна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/balabanova.jpg" alt="Балабанова А.О." className="h-full w-full object-cover" /> */}
+              БА
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Балабанова Анна Олеговна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Старший преподаватель кафедры инновационных технологий в экономике и управлении</p>
+            </div>
+          </motion.div>
+
+          {/* 11. Подоплелова Валерия Анатольевна */}
+          <motion.div
+            className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group relative transition-colors duration-300 hover:primary/25 hover:shadow-md sm:col-span-2 sm:w-[calc(50%-0.625rem)] sm:justify-self-center"
+            variants={cardItem}
+            {...hoverCard}
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none group-hover:bg-primary group-hover:text-white transition-colors duration-300 overflow-hidden">
+              {/* <img src="/path/to/podoplelova.jpg" alt="Подоплелова В.А." className="h-full w-full object-cover" /> */}
+              ПВ
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-foreground leading-snug">Подоплелова Валерия Анатольевна</p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">Старший преподаватель кафедры архитектуры, дизайна и экологии</p>
+            </div>
+          </motion.div>
         </motion.div>
       </section>
 
