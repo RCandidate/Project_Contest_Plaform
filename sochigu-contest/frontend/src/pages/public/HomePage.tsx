@@ -8,16 +8,16 @@ import { fadeUp, fadeUpView, fadeIn, staggerView, cardItem, hoverCard, hoverBtn 
 
 
 import mascot from '../../../mascot-removebg-preview.png';
-import photosyrkova from '../../../assets/tutor-syrk.jpg';
-import photovidisheva from '../../../assets/tutor-vid.jpg';
-import photopotasheva from '../../../assets/tutor-pot.jpg';
-import photodrach from '../../../assets/Drach_VE.jpg';
-import photodavydovich from '../../../assets/Davydovich_AN.jpg';
-import photohachemizova from '../../../assets/Hachemizova_EN.jpg';
-import photokopyrin from '../../../assets/Kopyrin_AS.jpg';
-import photopodoplelova from '../../../assets/Podoplelova_VA.jpg';
-import photoserdukova from '../../../assets/Serdukova_NK.jpg';
-import phototabak from '../../../assets/Tabak_LV.jpg';
+import photosyrkova from '../../../assets/tutor-syrk.webp';
+import photovidisheva from '../../../assets/tutor-vid.webp';
+import photopotasheva from '../../../assets/tutor-pot.webp';
+import photodrach from '../../../assets/Drach_VE.webp';
+import photodavydovich from '../../../assets/Davydovich_AN.webp';
+import photohachemizova from '../../../assets/Hachemizova_EN.webp';
+import photokopyrin from '../../../assets/Kopyrin_AS.webp';
+import photopodoplelova from '../../../assets/Podoplelova_VA.webp';
+import photoserdukova from '../../../assets/Serdukova_NK.webp';
+import phototabak from '../../../assets/Tabak_LV.webp';
 
 
 const MotionLink = motion(Link);
