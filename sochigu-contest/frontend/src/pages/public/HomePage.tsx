@@ -18,7 +18,8 @@ import photokopyrin from '../../../assets/Kopyrin_AS.webp';
 import photopodoplelova from '../../../assets/Podoplelova_VA.webp';
 import photoserdukova from '../../../assets/Serdukova_NK.webp';
 import phototabak from '../../../assets/Tabak_LV.webp';
-
+import photobalabanova from '../../../assets/Balabanova_AO.webp';
+import photozenkova from '../../../assets/Zenkova_TL.webp';
 
 const MotionLink = motion(Link);
 
@@ -106,7 +107,7 @@ export function HomePage() {
         >
           {[
             { icon: Trophy, label: "2 номинации", desc: "Бизнес и практико-ориентированные" },
-            { icon: Users, label: "500+ участников", desc: "Студенты со всей России" },
+            { icon: Users, label: "50+ участников", desc: "Студентов СочиГУ" },
             { icon: Gift, label: "Бесплатное участие", desc: "Без взносов и платежей" },
             { icon: Award, label: "Денежные гранты", desc: "Для победителей и призёров" },
           ].map((stat) => (
@@ -305,8 +306,8 @@ export function HomePage() {
             {...hoverCard}
           >
             <div className="relative h-16 w-16 shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-primary-light text-primary font-bold text-lg select-none border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25 group-hover:bg-primary group-hover:text-white">
-                БА
+              <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+                <img src={photobalabanova} alt="Балабанова А.О." className="h-full w-full object-cover" />
               </div>
             </div>
 
@@ -322,7 +323,7 @@ export function HomePage() {
 
           {/* 11. Подоплелова Валерия Анатольевна */}
           <motion.div
-            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md sm:col-span-2 sm:w-[calc(50%-0.625rem)] sm:justify-self-center"
+            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
             variants={cardItem}
             {...hoverCard}
           >
@@ -346,8 +347,35 @@ export function HomePage() {
               </p>
             </div>
           </motion.div>
+
+        {/* 12. Зенкова Татьяна Леонидовна*/}
+        <motion.div
+            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            variants={cardItem}
+            {...hoverCard}
+          >
+
+            <div className="relative h-16 w-16 shrink-0">
+              <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-primary/10 transition-all duration-300 ease-out group-hover:scale-150 origin-center group-hover:border-primary/25">
+                <img
+                  src={photozenkova}
+                  alt="Зенкова Т.Л."
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="min-w-0 relative z-10">
+              <p className="font-semibold text-foreground leading-snug">
+                Зенкова Татьяна Леонидовна
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground leading-snug">
+                И.о. заведующего кафедрой романо-германской и русской филологии, кандидат филологических наук, доцент
+              </p>
+            </div>
         </motion.div>
-      </section>
+      </motion.div>
+    </section>
 
       {/* ── Этапы ── */}
       <section className="container mx-auto px-4 py-16">
