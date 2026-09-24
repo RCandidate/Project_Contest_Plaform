@@ -38,7 +38,7 @@ export function HomePage() {
           {/* Mascot — float animation via CSS keyframe */}
           <motion.img
             src={mascot} alt="" aria-hidden
-            className="absolute -top-28 right-[-130px] h-[720px] w-auto object-contain object-top pointer-events-none select-none hidden md:block"
+            className="absolute -top-28 right-[-130px] h-[720px] w-auto object-contain object-top  select-none hidden md:block"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
@@ -51,13 +51,13 @@ export function HomePage() {
               className="mb-6 self-start rounded-full bg-accent/90 px-4 py-1.5 text-sm font-semibold text-accent-foreground"
               initial="hidden" animate="show" custom={0.1} variants={fadeUp}
             >
-              <Calendar className="mr-1 inline-block h-4 w-4" /> Приём заявок до 30 октября
+              <Calendar className="mr-1 inline-block h-4 w-4 " /> Приём заявок до 30 октября
             </motion.div>
 
             <div className="pl-20">
               {/* Heading */}
               <motion.h1
-                className="mb-6 text-4xl font-extrabold leading-tight text-primary-foreground md:text-5xl lg:text-5xl"
+                className="mb-6 text-4xl font-extrabold leading-tight text-primary-foreground md:text-5xl lg:text-5xl "
                 initial="hidden" animate="show" custom={0.2} variants={fadeUp}
               >
                 Конкурс студенческих<br />
@@ -66,7 +66,7 @@ export function HomePage() {
 
               {/* Subtitle */}
               <motion.p
-                className="mb-8 text-lg text-primary-foreground/80 md:text-xl"
+                className="mb-8 text-lg text-primary-foreground/80 md:text-xl "
                 initial="hidden" animate="show" custom={0.35} variants={fadeUp}
               >
                 Представь свой проект. Получи поддержку.<br />
@@ -90,7 +90,7 @@ export function HomePage() {
             {/* Mobile mascot */}
             <motion.img
               src={mascot} alt="" aria-hidden
-              className="mx-auto mt-8 h-auto max-h-[280px] w-auto object-contain pointer-events-none select-none block md:hidden"
+              className="mx-auto mt-8 h-auto max-h-[280px] w-auto object-contain  select-none block md:hidden"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
             />
           </div>
@@ -111,7 +111,7 @@ export function HomePage() {
             { icon: Gift, label: "Бесплатное участие", desc: "Без взносов и платежей" },
             { icon: Award, label: "Денежные гранты", desc: "Для победителей и призёров" },
           ].map((stat) => (
-            <motion.div key={stat.label} className="flex items-start gap-4 rounded-xl bg-card p-5 shadow-md relative" variants={cardItem} {...hoverCard}>
+            <motion.div key={stat.label} className="flex items-start gap-4 rounded-xl bg-card p-5 shadow-md relative " variants={cardItem} {...hoverCard}>
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent">
                 <stat.icon className="h-6 w-6 text-primary" />
               </div>
@@ -125,7 +125,7 @@ export function HomePage() {
       </section>
 
       {/* ── Экспертный совет ── */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-4 py-16 ">
         <motion.h2
           className="mb-3 text-center text-3xl font-bold text-foreground"
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0} variants={fadeUpView}
@@ -148,7 +148,7 @@ export function HomePage() {
         >
         {/* 1. Давыдович Анна Рудольфовна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -165,7 +165,7 @@ export function HomePage() {
 
         {/* 2. Копырин Андрей Сергеевич */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -182,7 +182,7 @@ export function HomePage() {
 
         {/* 3. Табак Лариса Владимировна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -199,7 +199,7 @@ export function HomePage() {
 
         {/* 4. Сыркова Ирина Сергеевна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -216,7 +216,7 @@ export function HomePage() {
 
         {/* 5. Сердюкова Надежда Константиновна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -233,7 +233,7 @@ export function HomePage() {
 
         {/* 6. Видищева Евгения Владимировна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -250,7 +250,7 @@ export function HomePage() {
 
         {/* 7. Драч Владимир Евгеньевич */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -267,7 +267,7 @@ export function HomePage() {
 
         {/* 8. Хачемизова Екатерина Николаевна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -284,7 +284,7 @@ export function HomePage() {
 
         {/* 9. Поташова Ирина Юрьевна */}
         <motion.div
-          className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+          className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
           variants={cardItem}
           {...hoverCard}
         >
@@ -301,7 +301,7 @@ export function HomePage() {
 
           {/* 10. Балабанова Анна Олеговна */}
           <motion.div
-            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
             variants={cardItem}
             {...hoverCard}
           >
@@ -323,7 +323,7 @@ export function HomePage() {
 
           {/* 11. Подоплелова Валерия Анатольевна */}
           <motion.div
-            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
             variants={cardItem}
             {...hoverCard}
           >
@@ -350,7 +350,7 @@ export function HomePage() {
 
         {/* 12. Зенкова Татьяна Леонидовна*/}
         <motion.div
-            className="relative flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
+            className="relative flex items-center gap-4 rounded-xl bg-accent/50 p-5 shadow-sm border-2 border-primary/10 group overflow-hidden transition-colors duration-300 hover:border-primary/25 hover:shadow-md"
             variants={cardItem}
             {...hoverCard}
           >
@@ -378,13 +378,15 @@ export function HomePage() {
     </section>
 
       {/* ── Этапы ── */}
-      <section className="container mx-auto px-4 py-16">
-        <motion.h2
-          className="mb-10 text-center text-3xl font-bold text-foreground"
-          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0} variants={fadeUpView}
-        >
-          Этапы конкурса
-        </motion.h2>
+      <section className="container mx-auto px-4 py-16 ">
+        <div className="flex justify-center mb-10">
+          <motion.h2
+            className="text-3xl font-bold text-white bg-primary h-16 rounded-full px-4 flex items-center"
+            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0} variants={fadeUpView}
+          >
+            Этапы конкурса
+          </motion.h2>
+        </div>
         <motion.div
           className="grid gap-6 md:grid-cols-4"
           variants={staggerView}
@@ -409,7 +411,7 @@ export function HomePage() {
       </section>
 
       {/* ── Номинации ── */}
-      <section className="bg-primary-light/50 py-16">
+      <section className="bg-primary-light/50 py-16 ">
         <div className="container mx-auto px-4">
           <motion.h2
             className="mb-10 text-center text-3xl font-bold text-foreground"
@@ -446,7 +448,7 @@ export function HomePage() {
       </section>
 
       {/* ── Ключевые даты ── */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-4 py-16 ">
         <motion.h2
           className="mb-10 text-center text-3xl font-bold text-foreground"
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} custom={0} variants={fadeUpView}
@@ -494,7 +496,7 @@ export function HomePage() {
 
       {/* ── CTA ── */}
       <motion.section
-        className="hero-gradient px-4 py-16"
+        className="hero-gradient px-4 py-16 "
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -510,7 +512,7 @@ export function HomePage() {
             Готов участвовать?
           </motion.h2>
           <motion.p
-            className="mb-8 text-primary-foreground/80"
+            className="mb-8 text-primary-foreground/80 "
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.25 }}
@@ -522,7 +524,7 @@ export function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.35 }}
           >
-            <motion.button onClick={handleApply} className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-lg transition-colors hover:bg-accent-hover" {...hoverBtn}>
+            <motion.button onClick={handleApply} className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-lg transition-colors hover:bg-accent-hover " {...hoverBtn}>
               Подать заявку <ArrowRight size={18} />
             </motion.button>
           </motion.div>
