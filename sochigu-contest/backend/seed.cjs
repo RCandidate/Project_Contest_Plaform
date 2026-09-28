@@ -236,7 +236,7 @@ async function seed() {
 
   for (const w of winners) {
     await client.query(
-      `INSERT INTO winners (id, "projectTitle", "teamName", description, year, place, "nominationId", "photoUrl", university, "createdAt")
+      `INSERT INTO winners (id, "projectTitle", "teamName", description, year, place, "nomination_id", "photoUrl", university, "createdAt")
        VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
       [w.projectTitle, w.teamName, w.description, w.year, w.place, w.nominationId, w.photoUrl, w.university],
     );
