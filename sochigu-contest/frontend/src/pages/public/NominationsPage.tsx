@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, fadeUpView, stagger, staggerView, cardItem } from '@/utils/animations';
 
+import mascot from '../../../assets/mascot-about-contest.png';
+
 const criteriaBusiness = [
   "Полнота и проработанность бизнес-модели",
   "Рыночный потенциал и конкурентные преимущества",
@@ -35,6 +37,16 @@ export function NominationsPage() {
     <div>
       <section className="bg-primary-light/50 py-12">
         <div className="container mx-auto px-4">
+
+          {/* <motion.img
+            src={mascot} alt="" aria-hidden
+            className="relative z-10 -top-28 right-[-130px] h-[720px] w-auto object-contain object-top  select-none hidden md:block"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+            style={{ animation: 'mascotFloat 4s ease-in-out infinite' }}
+          /> */}
+
           <motion.nav
             className="mb-4 text-sm text-muted-foreground"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}

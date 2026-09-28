@@ -21,7 +21,7 @@ export const databaseConfig = (
   password: configService.get('DB_PASS', 'sochigu_pass'),
   database: configService.get('DB_NAME', 'sochigu_contest'),
   entities: [User, Nomination, Application, ApplicationLog, AppFile, News, Document, Winner, ContactMessage, Contest],
-  synchronize: configService.get('DB_SYNCHRONIZE', 'false') === 'true',
+  synchronize: String(configService.get('DB_SYNCHRONIZE', 'false')).trim().toLowerCase() === 'true',
   logging: configService.get('NODE_ENV') === 'development',
   migrations: ['dist/database/migrations/*.js'],
 });

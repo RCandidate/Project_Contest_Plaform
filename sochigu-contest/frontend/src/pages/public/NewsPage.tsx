@@ -8,6 +8,8 @@ import { News } from '@/types';
 import { formatDate } from '@/utils/formatDate';
 import { fadeUp, stagger, cardItem, hoverCardSm } from '@/utils/animations';
 
+import mascot from '../../../assets/mascot-news.png';
+
 const LIMIT = 10;
 
 function NewsCardSkeleton() {
@@ -79,7 +81,18 @@ export function NewsPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 max-w-6xl py-10">
+      <section className="relative ">
+        {/* <motion.img
+            src={mascot} alt="" aria-hidden
+            className="pointer-events-none absolute top-0 right-0 z-0 hidden h-[420px] w-auto select-none object-contain object-top md:block translate-x-1/4"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+            style={{ animation: 'mascotFloat 4s ease-in-out infinite' }}
+          /> */}
+      
+
+        <div className="container relative z-10 mx-auto max-w-6xl px-4 py-10">
         <motion.h1
           className="text-3xl font-bold text-primary-900 mb-8"
           initial="hidden" animate="show" variants={fadeUp}
@@ -88,7 +101,7 @@ export function NewsPage() {
         </motion.h1>
 
         {error ? (
-          <div className="text-center py-20">
+          <div className="text-center py-15">
             <p className="text-red-500 mb-4">Не удалось загрузить новости. Попробуйте позже.</p>
             <button onClick={() => setRetryKey(k => k + 1)}
               className="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -128,7 +141,15 @@ export function NewsPage() {
             )}
           </>
         )}
-      </div>
+        </div>
+      </section>
+      {/* Float keyframe for mascot */}
+      <style>{`
+        @keyframes mascotFloat {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-12px); }
+        }
+      `}</style>
     </main>
   );
 }

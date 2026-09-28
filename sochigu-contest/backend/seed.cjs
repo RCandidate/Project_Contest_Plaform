@@ -1,13 +1,14 @@
 // Seed script: node seed.cjs
 // Заполняет: news, nominations, documents, winners
+
 const { Client } = require('pg');
 
 const client = new Client({
-  host: 'localhost',
+  host: process.env.DB_HOST || 'postgres',
   port: 5432,
-  user: 'sochigu',
-  password: 'sochigu_pass',
-  database: 'sochigu_contest',
+  user: process.env.DB_USER || 'sochigu',
+  password: process.env.DB_PASS || 'sochigu_pass',
+  database: process.env.DB_NAME || 'sochigu_contest',
 });
 
 // ─── Данные ───────────────────────────────────────────────
