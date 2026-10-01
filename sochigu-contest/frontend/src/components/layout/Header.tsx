@@ -37,7 +37,7 @@ export function Header() {
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <MotionLink to="/" className="flex items-center gap-2 text-primary-foreground" {...hoverNav}>
           <img src={logoWhite} alt="СочиГУ" className="h-10 w-auto" />
-          <span className="hidden text-sm font-medium text-primary-foreground/80 sm:inline">| Конкурс проектов</span>
+          <span className="hidden text-sm font-medium text-primary-foreground/80 sm:inline">Конкурс проектов</span>
         </MotionLink>
 
         <nav className="hidden items-center gap-1 lg:flex">

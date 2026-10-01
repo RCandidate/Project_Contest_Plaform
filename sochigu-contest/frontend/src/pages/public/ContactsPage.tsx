@@ -5,6 +5,8 @@ import { MapPin, Mail, Globe } from "lucide-react";
 import { fadeUp, fadeUpView, stagger, staggerView, cardItem } from '@/utils/animations';
 import { contactsApi } from '@/api/contacts';
 
+import mascot from '../../../mascot-contact.png';
+
 function formatPhone(raw: string, prev = ''): string {
   let digits = raw.replace(/\D/g, '');
   // Если пользователь удалил разделитель (строка короче, но цифры те же) — удаляем ещё одну цифру

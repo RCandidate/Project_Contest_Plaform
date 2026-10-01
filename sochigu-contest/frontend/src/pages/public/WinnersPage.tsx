@@ -6,6 +6,8 @@ import { Winner, Nomination } from '@/types';
 import { placeMedal } from '@/utils/placeMedal';
 import { fadeUp, stagger, cardItem, hoverCardSm } from '@/utils/animations';
 
+import mascot from '../../../mascot-winners.png';
+
 type WinnerContest = { id: string; name: string; startDate: string; endDate: string };
 
 function WinnerCardSkeleton() {

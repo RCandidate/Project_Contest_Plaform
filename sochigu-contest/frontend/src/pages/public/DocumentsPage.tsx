@@ -6,6 +6,8 @@ import { formatDate } from '@/utils/formatDate';
 import { formatFileSize } from '@/utils/formatFileSize';
 import { fadeUp, fadeUpView, stagger, staggerView, cardItem } from '@/utils/animations';
 
+import mascot from '../../../mascot-documents.png';
+
 function FileIcon({ mimeType }: { mimeType: string }) {
   if (mimeType === 'application/pdf') {
     return (

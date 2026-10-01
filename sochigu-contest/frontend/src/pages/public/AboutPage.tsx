@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { Target, BookOpen, Users, Trophy, CheckCircle, ArrowRight, GraduationCap, Presentation, Award } from "lucide-react";
 import { fadeUp, fadeUpView, fadeIn, stagger, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
 
+import mascot1 from '../../../assets/mascot-about-contest.png';
+import mascot2 from '../../../assets/mascot-contacts.png';
+
 const MotionLink = motion(Link);
 
 export function AboutPage() {
@@ -53,23 +56,36 @@ export function AboutPage() {
       </section>
 
       {/* Миссия */}
-      <section className="container mx-auto px-4 py-16">
-        <motion.div
-          className="mx-auto max-w-3xl"
-          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={fadeUpView}
-        >
-          <h2 className="mb-4 text-2xl font-bold text-foreground">Миссия</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Повышение компетенций в области проектной деятельности; формирование
-            проектной системы в СочиГУ.
-          </p>
-        </motion.div>
+      <section className="relative overflow-hidden">
+        <div className="mx-auto flex max-w-5xl justify-between gap-8 px-4 pt-16">
+          <motion.div
+            className="max-w-1xl flex-1 items-center pb-6"
+            initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={fadeUpView}
+          >
+            <h2 className="mb-4 text-2xl font-bold text-foreground">Миссия</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Повышение компетенций в области проектной деятельности; формирование
+              проектной системы в СочиГУ.
+            </p>
+          </motion.div>
+
+          <div className="hidden h-[320px] w-[250px] shrink-0 items-start justify-center overflow-hidden md:flex items-end">
+            <motion.img
+              src={mascot1} alt="" aria-hidden
+              className="h-[320px] w-auto max-w-none select-none object-contain object-top"
+              initial={{ opacity: 0, y: 80 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            />
+          </div>
+        </div>
       </section>
 
       {/* Цели */}
-      <section className="bg-primary-light/50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl">
+      <section className="relative overflow-hidden bg-primary-light/50">
+        <div className="mx-auto flex max-w-5xl items-end justify-between gap-8 px-4 pt-16">
+          <div className="max-w-3xl flex-1 pb-16">
             <motion.div
               className="mb-6 flex items-center gap-3"
               initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={fadeUpView}
@@ -89,6 +105,17 @@ export function AboutPage() {
                 </motion.li>
               ))}
             </motion.ul>
+          </div>
+
+          <div className="hidden h-[320px] w-[250px] shrink-0 items-start justify-center overflow-hidden md:flex">
+            <motion.img
+              src={mascot2} alt="" aria-hidden
+              className="h-[320px] w-auto max-w-none select-none object-contain object-top"
+              initial={{ opacity: 0, y: 80 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            />
           </div>
         </div>
       </section>

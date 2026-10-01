@@ -33,7 +33,7 @@ export function HomePage() {
   return (
     <div>
       {/* ── Hero ── */}
-      <section className="hero-gradient relative overflow-hidden pt-20 pb-20 md:pt-20 md:pb-24 md:h-[520px]">
+      <section className="hero-gradient relative overflow-hidden pt-20 pb-0 md:pt-20 md:pb-24 md:h-[520px]">
         <div className="container relative z-10 mx-auto px-4 h-full">
           {/* Mascot — float animation via CSS keyframe */}
           <motion.img
@@ -88,11 +88,16 @@ export function HomePage() {
             </motion.div>
 
             {/* Mobile mascot */}
-            <motion.img
-              src={mascot} alt="" aria-hidden
-              className="mx-auto mt-8 h-auto max-h-[280px] w-auto object-contain  select-none block md:hidden"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
-            />
+            <div className="relative mt-6 flex h-[400px] w-full justify-center overflow-hidden md:hidden">
+              <motion.img
+                src={mascot} alt="" aria-hidden
+                className="h-[540px] w-auto max-w-none shrink-0 select-none object-contain object-top"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                style={{ animation: 'mascotFloat 4s ease-in-out infinite' }}
+              />
+            </div>
           </div>
         </div>
       </section>

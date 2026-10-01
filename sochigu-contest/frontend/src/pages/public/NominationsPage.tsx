@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, fadeUpView, stagger, staggerView, cardItem } from '@/utils/animations';
 
-import mascot from '../../../assets/mascot-about-contest.png';
+import mascot1 from '../../../assets/mascot-contacts.png';
+import mascot2 from '../../../assets/mascot-experts.png';
 
 const criteriaBusiness = [
   "Полнота и проработанность бизнес-модели",
@@ -38,14 +39,8 @@ export function NominationsPage() {
       <section className="bg-primary-light/50 py-12">
         <div className="container mx-auto px-4">
 
-          {/* <motion.img
-            src={mascot} alt="" aria-hidden
-            className="relative z-10 -top-28 right-[-130px] h-[720px] w-auto object-contain object-top  select-none hidden md:block"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
-            style={{ animation: 'mascotFloat 4s ease-in-out infinite' }}
-          /> */}
+          
+
 
           <motion.nav
             className="mb-4 text-sm text-muted-foreground"
@@ -71,39 +66,59 @@ export function NominationsPage() {
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}
         >
           <motion.div className="rounded-xl bg-card border-l-4 border-primary p-6 shadow-sm" variants={cardItem}>
-            <div className="mb-3 inline-block rounded-lg bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground">
-              Номинация 1
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex-1">
+                <div className="mb-3 inline-block rounded-lg bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground">
+                  Номинация 1
+                </div>
+                <h2 className="mb-2 text-2xl font-bold text-foreground">Бизнес-проекты</h2>
+                <p className="mb-5 text-muted-foreground">Коммерциализация, Pre-Seed/Seed стадии.</p>
+                <p className="mb-3 text-sm font-semibold text-foreground">Критерии оценки:</p>
+                <ul className="space-y-2">
+                  {criteriaBusiness.map((c, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <motion.img
+                src={mascot1} alt="" aria-hidden
+                className="mx-auto h-44 w-auto shrink-0 select-none object-contain md:mx-0 md:h-60"
+                whileHover={{ scale: 1.06, rotate: -2 }}
+                transition={{ type: 'spring', stiffness: 250, damping: 15 }}
+              />
             </div>
-            <h2 className="mb-2 text-2xl font-bold text-foreground">Бизнес-проекты</h2>
-            <p className="mb-5 text-muted-foreground">Коммерциализация, Pre-Seed/Seed стадии.</p>
-            <p className="mb-3 text-sm font-semibold text-foreground">Критерии оценки:</p>
-            <ul className="space-y-2">
-              {criteriaBusiness.map((c, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                  {c}
-                </li>
-              ))}
-            </ul>
           </motion.div>
 
           <motion.div className="rounded-xl bg-card border-l-4 border-accent p-6 shadow-sm" variants={cardItem}>
-            <div className="mb-3 inline-block rounded-lg bg-accent px-3 py-1 text-sm font-semibold text-accent-foreground">
-              Номинация 2
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex-1">
+                <div className="mb-3 inline-block rounded-lg bg-accent px-3 py-1 text-sm font-semibold text-accent-foreground">
+                  Номинация 2
+                </div>
+                <h2 className="mb-2 text-2xl font-bold text-foreground">Практико-ориентированные</h2>
+                <p className="mb-5 text-muted-foreground">Образовательные и социально значимые проекты.</p>
+                <p className="mb-3 text-sm font-semibold text-foreground">Критерии оценки:</p>
+                <ul className="space-y-2">
+                  {criteriaPractical.map((c, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <motion.img
+                src={mascot2} alt="" aria-hidden
+                className="mx-auto h-44 w-auto shrink-0 select-none object-contain md:mx-0 md:h-60"
+                whileHover={{ scale: 1.06, rotate: 2 }}
+                transition={{ type: 'spring', stiffness: 250, damping: 15 }}
+              />
             </div>
-            <h2 className="mb-2 text-2xl font-bold text-foreground">Практико-ориентированные</h2>
-            <p className="mb-5 text-muted-foreground">Образовательные и социально значимые проекты.</p>
-            <p className="mb-3 text-sm font-semibold text-foreground">Критерии оценки:</p>
-            <ul className="space-y-2">
-              {criteriaPractical.map((c, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                  {c}
-                </li>
-              ))}
-            </ul>
           </motion.div>
-        </motion.div>
+          </motion.div>
 
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={fadeUpView}

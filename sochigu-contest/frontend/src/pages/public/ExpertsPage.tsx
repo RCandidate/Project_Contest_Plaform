@@ -20,6 +20,7 @@ import phototabak from '../../../assets/Tabak_LV.webp';
 import photobalabanova from '../../../assets/Balabanova_AO.webp';
 import photozenkova from '../../../assets/Zenkova_TL.webp';
 
+import mascot from '../../../assets/mascot-documents.png';
 
 export function ExpertsPage() {
   useEffect(() => { document.title = 'Экспертный совет — Конкурс СочиГУ'; }, []);
@@ -27,8 +28,20 @@ export function ExpertsPage() {
 
   return (
     <div>
-      <section className="bg-primary-light/50 py-12">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden bg-primary-light/50 py-12 min-h-[200px] md:min-h-[260px]">
+        <motion.img
+          src={mascot} alt="" aria-hidden
+          className="pointer-events-none absolute right-0 top-6 z-0 h-[300px] w-auto max-w-none select-none object-contain object-top md:right-16 md:h-[400px]"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
+          transition={{
+            opacity: { duration: 0.8, delay: 0.3 },
+            x: { duration: 0.8, ease: 'easeOut', delay: 0.3 },
+            y: { duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.1 },
+          }}
+        />
+
+        <div className="container relative z-10 mx-auto px-4">
           <motion.nav
             className="mb-4 text-sm text-muted-foreground"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}

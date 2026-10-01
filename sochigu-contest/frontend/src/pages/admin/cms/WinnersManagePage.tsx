@@ -85,12 +85,38 @@ export function WinnersManagePage() {
   };
 
   const handleSave = async () => {
+    if (!form.projectTitle.trim() || !form.teamName.trim() || !form.nominationId) {
+      showToast('Заполните название проекта, команду и номинацию', 'error');
+      return;
+    }
+
+    const payload = {
+      ...form,
+      projectTitle: form.projectTitle.trim(),
+      teamName: form.teamName.trim(),
+      university: form.university.trim() || null,
+      description: form.description.trim() || null,
+      photoUrl: form.photoUrl.trim() || null,
+      contestId: form.contestId || null,
+    };
+
     setSaving(true);
     try {
-      if (editing) { await winnersApi.update(editing.id, form); showToast('Обновлено', 'success'); }
-      else { await winnersApi.create(form); showToast('Создано', 'success'); }
-      setModalOpen(false); load();
-    } catch { showToast('Ошибка', 'error'); } finally { setSaving(false); }
+      if (editing) {
+        await winnersApi.update(editing.id, payload as any);
+        showToast('Обновлено', 'success');
+      } else {
+        await winnersApi.create(payload as any);
+        showToast('Создано', 'success');
+      }
+      setModalOpen(false);
+      load();
+    } catch (err: any) {
+      const msg = err?.response?.data?.message;
+      showToast(Array.isArray(msg) ? msg.join(', ') : typeof msg === 'string' ? msg : 'Ошибка', 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (item: Winner) => {

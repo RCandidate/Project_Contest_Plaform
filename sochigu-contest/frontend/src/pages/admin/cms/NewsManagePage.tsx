@@ -78,18 +78,34 @@ export function NewsManagePage() {
   const openCreate = () => { setEditing(null); reset(EMPTY); setPhotoError(''); setModalOpen(true); };
   const openEdit = (item: News) => {
     setEditing(item);
-    reset({ title: item.title, slug: item.slug, excerpt: item.excerpt ?? '', content: item.content, coverImage: item.coverImage ?? '', isPublished: item.isPublished, contestId: item.contestId ?? '' });
+    reset({ title: item.title, slug: item.slug, excerpt: item.excerpt ?? '', content: item.content, coverImage: item.coverImage ?? '', isPublished: item.isPublished, contestId: item.contestId ?? crypto.randomUUID() });
     setPhotoError('');
     setModalOpen(true);
   };
 
   const onSubmit = async (data: FormData) => {
+    const payload = {
+      ...data,
+      title: data.title.trim(),
+      slug: data.slug.trim(),
+      excerpt: data.excerpt.trim(),
+      contestId: contests.some(c => c.id === data.contestId) ? data.contestId : null,
+    };
+
     try {
-      if (editing) { await newsApi.update(editing.id, data); showToast('Новость обновлена', 'success'); }
-      else { await newsApi.create(data); showToast('Новость создана', 'success'); }
+      if (editing) {
+        await newsApi.update(editing.id, payload as Partial<News>);
+        showToast('Новость обновлена', 'success');
+      } else {
+        await newsApi.create(payload as Partial<News>);
+        showToast('Новость создана', 'success');
+      }
       setModalOpen(false);
       load();
-    } catch { showToast('Ошибка при сохранении', 'error'); }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message;
+      showToast(typeof msg === 'string' ? msg : 'Ошибка при сохранении', 'error');
+    }
   };
 
   const handleTogglePublish = async (item: News) => {

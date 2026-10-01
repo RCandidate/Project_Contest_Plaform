@@ -32,6 +32,7 @@ export function ExpertsPage() {
   const [results, setResults] = useState<User[]>([]);
   const [found, setFound] = useState<User | null>(null);
   const [searching, setSearching] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [assigning, setAssigning] = useState(false);
   const { showToast } = useToast();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -43,7 +44,13 @@ export function ExpertsPage() {
 
   useEffect(() => { load(); }, []);
 
-  const openAssign = () => { setSearchEmail(''); setFound(null); setResults([]); setAssignOpen(true); };
+  const openAssign = () => {
+    setSearchEmail('');
+    setFound(null);
+    setResults([]);
+    setSearched(false);
+    setAssignOpen(true);
+  };
   const openCreate = () => { setCreateForm(EMPTY_CREATE); setCreateOpen(true); };
 
   const openProfile = (user: User) => {
@@ -127,13 +134,15 @@ export function ExpertsPage() {
     setSearchEmail(value);
     setFound(null);
     setResults([]);
+    setSearched(false);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (!value.trim()) return;
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
         const users = await usersApi.getAll({ search: value.trim() });
-        setResults(users.filter(u => u.role !== 'expert'));
+        setResults(users);
+        setSearched(true);
       } catch { showToast('Ошибка поиска', 'error'); }
       finally { setSearching(false); }
     }, 400);
@@ -362,15 +371,22 @@ export function ExpertsPage() {
           </div>
           {results.length > 0 && !found && (
             <ul className="border border-gray-200 rounded-lg divide-y divide-gray-100 max-h-48 overflow-y-auto">
-              {results.map(u => (
-                <li key={u.id} onClick={() => { setFound(u); setResults([]); }} className="px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors">
-                  <p className="text-sm font-medium text-gray-900">{u.lastName} {u.firstName} {u.middleName ?? ''}</p>
-                  <p className="text-xs text-gray-500">{u.email}</p>
-                </li>
-              ))}
+              {results.map(u => {
+                const isExpert = u.role === 'expert';
+                return (
+                  <li
+                    key={u.id}
+                    onClick={() => { if (isExpert) return; setFound(u); setResults([]); }}
+                    className={`px-4 py-2.5 transition-colors ${isExpert ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'}`}
+                  >
+                    <p className="text-sm font-medium text-gray-900">{u.lastName} {u.firstName} {u.middleName ?? ''}</p>
+                    <p className="text-xs text-gray-500">{u.email}{isExpert ? ' — уже эксперт' : ''}</p>
+                  </li>
+                );
+              })}
             </ul>
           )}
-          {searchEmail.trim() && !searching && results.length === 0 && !found && (
+          {searched && !searching && results.length === 0 && !found && (
             <p className="text-sm text-gray-400 text-center py-1">Пользователи не найдены</p>
           )}
           {found && (
@@ -380,7 +396,7 @@ export function ExpertsPage() {
                 <p className="text-gray-500">{found.email}</p>
                 <p className="text-gray-400 text-xs mt-1">Текущая роль: {found.role}</p>
               </div>
-              <button onClick={() => { setFound(null); setSearchEmail(''); }} className="text-gray-400 hover:text-gray-600 text-xs ml-3">✕</button>
+              <button onClick={() => { setFound(null); setSearchEmail(''); setSearched(false); }} className="text-gray-400 hover:text-gray-600 text-xs ml-3">✕</button>
             </div>
           )}
           <div className="flex justify-end gap-3 pt-2">

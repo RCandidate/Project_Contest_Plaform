@@ -6,6 +6,7 @@ import { newsApi } from '@/api/news';
 import { News } from '@/types';
 import { formatDate } from '@/utils/formatDate';
 
+
 export function NewsDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const [news, setNews] = useState<News | null>(null);
