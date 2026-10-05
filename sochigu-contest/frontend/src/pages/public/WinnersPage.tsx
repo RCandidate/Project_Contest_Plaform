@@ -6,9 +6,11 @@ import { Winner, Nomination } from '@/types';
 import { placeMedal } from '@/utils/placeMedal';
 import { fadeUp, stagger, cardItem, hoverCardSm } from '@/utils/animations';
 
-import mascot from '../../../mascot-winners.png';
+import mascot from '../../../assets/mascot-winners.png';
 
 type WinnerContest = { id: string; name: string; startDate: string; endDate: string };
+
+const GRID_CLASSES = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6';
 
 function WinnerCardSkeleton() {
   return (
@@ -91,67 +93,84 @@ export function WinnersPage() {
   }, [filterContest, filterNomination, retryKey]);
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 max-w-6xl py-10">
-        <motion.h1
-          className="text-3xl font-bold text-primary-900 mb-8"
-          initial="hidden" animate="show" variants={fadeUp}
-        >
-          Победители конкурса
-        </motion.h1>
-
-        <motion.div
-          className="flex flex-wrap gap-3 mb-8"
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          {contests.length > 0 && (
-            <select value={filterContest} onChange={(e) => setFilterContest(e.target.value)}
-              className="select-custom pl-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
-              <option value="">Все конкурсы</option>
-              {contests.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-          )}
-          <select value={filterNomination} onChange={(e) => setFilterNomination(e.target.value)}
-            className="select-custom pl-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
-            <option value="">Все номинации</option>
-            {nominations.map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
-          </select>
-          {(filterContest || filterNomination) && (
-            <button
-              onClick={() => { setFilterContest(''); setFilterNomination(''); }}
-              className="pl-3 py-2 pr-3 rounded-lg border border-gray-300 text-sm text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors"
-            >
-              Сбросить
-            </button>
-          )}
-        </motion.div>
-
-        {error ? (
-          <div className="text-center py-20">
-            <p className="text-red-500 mb-4">Не удалось загрузить победителей. Попробуйте позже.</p>
-            <button onClick={() => setRetryKey(k => k + 1)}
-              className="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-              Повторить
-            </button>
-          </div>
-        ) : loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <WinnerCardSkeleton key={i} />)}
-          </div>
-        ) : winners.length === 0 ? (
-          <p className="text-gray-500 text-center py-20">Победители пока не объявлены.</p>
-        ) : (
-          <motion.div
-            key={`${filterContest}-${filterNomination}`}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={stagger}
-            initial="hidden"
-            animate="show"
+    <main className="min-h-screen bg-gray-50 overflow-hidden">
+      <div className="flex">
+        {/* Контент */}
+        <div className="flex-1 min-w-0 container mx-auto px-4 max-w-6xl py-10">
+          <motion.h1
+            className="text-3xl font-bold text-primary-900 mb-8"
+            initial="hidden" animate="show" variants={fadeUp}
           >
-            {winners.map((w) => <WinnerCard key={w.id} winner={w} />)}
+            Победители конкурса
+          </motion.h1>
+
+          <motion.div
+            className="flex flex-wrap gap-3 mb-8"
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+          >
+            {contests.length > 0 && (
+              <select value={filterContest} onChange={(e) => setFilterContest(e.target.value)}
+                className="select-custom pl-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <option value="">Все конкурсы</option>
+                {contests.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            )}
+            <select value={filterNomination} onChange={(e) => setFilterNomination(e.target.value)}
+              className="select-custom pl-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+              <option value="">Все номинации</option>
+              {nominations.map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
+            </select>
+            {(filterContest || filterNomination) && (
+              <button
+                onClick={() => { setFilterContest(''); setFilterNomination(''); }}
+                className="pl-3 py-2 pr-3 rounded-lg border border-gray-300 text-sm text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors"
+              >
+                Сбросить
+              </button>
+            )}
           </motion.div>
-        )}
+
+          {error ? (
+            <div className="text-center py-20">
+              <p className="text-red-500 mb-4">Не удалось загрузить победителей. Попробуйте позже.</p>
+              <button onClick={() => setRetryKey(k => k + 1)}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                Повторить
+              </button>
+            </div>
+          ) : loading ? (
+            <div className={GRID_CLASSES}>
+              {Array.from({ length: 6 }).map((_, i) => <WinnerCardSkeleton key={i} />)}
+            </div>
+          ) : winners.length === 0 ? (
+            <p className="text-gray-500 text-center py-20">Победители пока не объявлены.</p>
+          ) : (
+            <motion.div
+              key={`${filterContest}-${filterNomination}`}
+              className={GRID_CLASSES}
+              variants={stagger}
+              initial="hidden"
+              animate="show"
+            >
+              {winners.map((w) => <WinnerCard key={w.id} winner={w} />)}
+            </motion.div>
+          )}
+        </div>
+
+        {/* Колонка с маскотом */}
+        <aside className="hidden lg:block shrink-0 w-72 xl:w-[26rem] 2xl:w-[32rem] pointer-events-none overflow-hidden" aria-hidden>
+          <div className="sticky top-0 h-screen relative">
+            <motion.img
+              src={mascot}
+              alt=""
+              className="absolute bottom-0 inset-x-0 h-[80vh] w-full object-cover object-bottom select-none"
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            />
+          </div>
+        </aside>
       </div>
     </main>
   );

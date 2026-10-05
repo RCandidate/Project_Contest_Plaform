@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { fadeUp, fadeUpView, stagger, staggerView, cardItem } from '@/utils/animations';
 
 import mascot1 from '../../../assets/mascot-contacts.png';
-import mascot2 from '../../../assets/mascot-experts.png';
+import mascot2 from '../../../assets/masscot_serious.png';
 
 const criteriaBusiness = [
   "Полнота и проработанность бизнес-модели",

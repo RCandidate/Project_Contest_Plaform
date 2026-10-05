@@ -74,6 +74,11 @@ export class NewsController implements OnModuleInit {
     res.sendFile(safePath);
   }
 
+  @Get('pinned')
+    getPinned() {
+      return this.newsService.getPinned(); // добавил закреп новости
+  }
+
   @Get(':slug')
   findOne(@Param('slug') slug: string) {
     return this.newsService.findBySlug(slug);
@@ -99,8 +104,4 @@ export class NewsController implements OnModuleInit {
   remove(@Param('id') id: string) {
     return this.newsService.remove(id);
   }
-  @Get('pinned')
-  getPinned() {
-    return this.newsService.getPinned(); // добавил закреп новости
-}
 }

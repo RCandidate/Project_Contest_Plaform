@@ -15,10 +15,15 @@ const LIMIT = 10;
 
 // ── Три ссылки справа от главной новости: впиши свои названия и адреса ──
 const contestLinks = [
-  { label: 'Ссылка 1', href: '#' },
-  { label: 'Ссылка 2', href: '#' },
-  { label: 'Ссылка 3', href: '#' },
+  { label: 'Сайт СочиГУ', href: 'https://sochi.university/' },
+  { label: 'Канал СочиГУ в MAX', href: 'https://' },
+  { label: 'Telegram-канал СочиГУ', href: 'https://t.me/sochi_university' },
 ];
+
+// ── Закреплённая новость ──
+// Пока в админке нет галочки «Закрепить», укажи здесь slug нужной новости
+// (он виден в адресе новости: /news/ЭТОТ-SLUG). Пустая строка = не использовать.
+const PINNED_SLUG = '';
 
 function NewsCardSkeleton() {
   return (
@@ -106,8 +111,8 @@ export function NewsPage() {
 
   const totalPages = Math.ceil(total / LIMIT);
 
-  // Верхний блок: закреплённая в админке новость, только на 1-й странице
-  const featured = page === 1 && pinned ? pinned : undefined;
+  // Верхний блок на 1-й странице: закреплённая новость, а если её нет, самая свежая
+  const featured = page === 1 ? (pinned ?? news[0]) : undefined;
 
   useEffect(() => {
     setLoading(true);
@@ -120,7 +125,18 @@ export function NewsPage() {
   }, [page, retryKey]);
 
   useEffect(() => {
-    newsApi.getPinned().then(setPinned).catch(() => setPinned(null));
+    const loadPinned = async () => {
+      // 1) закреплённая через админку (когда бэкенд это поддерживает)
+      try {
+        const p = await newsApi.getPinned();
+        if (p) { setPinned(p); return; }
+      } catch { /* эндпоинта ещё нет, идём дальше */ }
+      // 2) закреплённая по slug из константы PINNED_SLUG
+      if (PINNED_SLUG) {
+        try { setPinned(await newsApi.getBySlug(PINNED_SLUG)); } catch { /* новость не найдена */ }
+      }
+    };
+    loadPinned();
   }, []);
 
   useEffect(() => { document.title = 'Новости — Конкурс СочиГУ'; }, []);
@@ -128,7 +144,7 @@ export function NewsPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* ── Верхний блок: «Конкурс открыт» ── */}
-      {featured && (
+      {page === 1 && (
         <section className="border-b border-primary/10 bg-primary-light/50">
           <div className="container mx-auto max-w-6xl px-4 py-10">
             <motion.div
@@ -140,12 +156,14 @@ export function NewsPage() {
             </motion.div>
 
             <div className="grid items-center gap-6 lg:grid-cols-5">
-              <div className="lg:col-span-3">
-                <FeaturedNews item={featured} />
-              </div>
+              {featured && (
+                <div className="lg:col-span-3">
+                  <FeaturedNews item={featured} />
+                </div>
+              )}
 
               <motion.div
-                className="flex flex-col gap-3 lg:col-span-2"
+                className={`flex flex-col gap-3 ${featured ? 'lg:col-span-2' : 'lg:col-span-5'}`}
                 variants={stagger}
                 initial="hidden"
                 animate="show"

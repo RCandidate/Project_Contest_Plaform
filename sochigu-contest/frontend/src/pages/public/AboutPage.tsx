@@ -5,7 +5,6 @@ import { Target, BookOpen, Users, Trophy, CheckCircle, ArrowRight, GraduationCap
 import { fadeUp, fadeUpView, fadeIn, stagger, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
 
 import mascot1 from '../../../assets/mascot-about-contest.png';
-import mascot2 from '../../../assets/mascot-contacts.png';
 
 const MotionLink = motion(Link);
 
@@ -105,17 +104,6 @@ export function AboutPage() {
                 </motion.li>
               ))}
             </motion.ul>
-          </div>
-
-          <div className="hidden h-[320px] w-[250px] shrink-0 items-start justify-center overflow-hidden md:flex">
-            <motion.img
-              src={mascot2} alt="" aria-hidden
-              className="h-[320px] w-auto max-w-none select-none object-contain object-top"
-              initial={{ opacity: 0, y: 80 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
-            />
           </div>
         </div>
       </section>
