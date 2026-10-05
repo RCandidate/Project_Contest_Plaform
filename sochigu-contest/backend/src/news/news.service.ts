@@ -26,11 +26,24 @@ export class NewsService {
     return news;
   }
 
-  create(data: Partial<News>) {
+  async getPinned(): Promise<News | null> {
+    return this.repo.findOne({
+      where: { isPinned: true, isPublished: true },
+      order: { publishedAt: 'DESC' },
+    });
+  }
+
+  async create(data: Partial<News>) {
+    if (data.isPinned) {
+      await this.repo.update({ isPinned: true }, { isPinned: false });
+    }
     return this.repo.save(this.repo.create(data));
   }
 
-  update(id: string, data: Partial<News>) {
+  async update(id: string, data: Partial<News>) {
+    if (data.isPinned) {
+      await this.repo.update({ isPinned: true }, { isPinned: false });
+    }
     return this.repo.update(id, data);
   }
 

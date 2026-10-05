@@ -55,4 +55,7 @@ export class News {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isPinned: boolean;
 }

@@ -114,6 +114,7 @@ export interface News {
   contestId?: string;
   contest?: Contest;
   createdAt: string;
+  isPinned: boolean;
 }
 
 export interface Document {

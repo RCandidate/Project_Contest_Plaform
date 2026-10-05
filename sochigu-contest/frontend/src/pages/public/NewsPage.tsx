@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 const MotionLink = motion(Link);
 import { newsApi } from '@/api/news';
@@ -11,6 +12,13 @@ import { fadeUp, stagger, cardItem, hoverCardSm } from '@/utils/animations';
 import mascot from '../../../assets/mascot-news.png';
 
 const LIMIT = 10;
+
+// ── Три ссылки справа от главной новости: впиши свои названия и адреса ──
+const contestLinks = [
+  { label: 'Ссылка 1', href: '#' },
+  { label: 'Ссылка 2', href: '#' },
+  { label: 'Ссылка 3', href: '#' },
+];
 
 function NewsCardSkeleton() {
   return (
@@ -57,6 +65,36 @@ function NewsCard({ item }: { item: News }) {
   );
 }
 
+function FeaturedNews({ item }: { item: News }) {
+  const date = item.publishedAt ?? item.createdAt;
+  return (
+    <MotionLink
+      to={`/news/${item.slug}`}
+      className="group grid overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition-shadow hover:shadow-lg md:grid-cols-2"
+      initial="hidden" animate="show" variants={fadeUp}
+    >
+      {item.coverImage ? (
+        <img
+          src={item.coverImage} alt={item.title}
+          className="h-[220px] w-full object-cover md:h-full md:min-h-[260px]"
+        />
+      ) : (
+        <div className="flex h-[220px] w-full select-none items-center justify-center bg-gray-200 text-sm text-gray-400 md:h-full md:min-h-[260px]">
+          Нет обложки
+        </div>
+      )}
+      <div className="flex flex-col justify-center p-6">
+        <time className="mb-2 text-xs text-gray-400">{formatDate(date)}</time>
+        <h2 className="mb-3 text-xl font-bold leading-snug text-gray-900 line-clamp-3">{item.title}</h2>
+        {item.excerpt && <p className="mb-4 text-sm text-gray-600 line-clamp-4">{item.excerpt}</p>}
+        <span className="inline-flex items-center gap-1 self-start text-sm font-semibold text-primary-700 transition-all group-hover:gap-2">
+          Читать <ArrowRight size={16} />
+        </span>
+      </div>
+    </MotionLink>
+  );
+}
+
 export function NewsPage() {
   const [news, setNews] = useState<News[]>([]);
   const [total, setTotal] = useState(0);
@@ -64,8 +102,12 @@ export function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
+  const [pinned, setPinned] = useState<News | null>(null);
 
   const totalPages = Math.ceil(total / LIMIT);
+
+  // Верхний блок: закреплённая в админке новость, только на 1-й странице
+  const featured = page === 1 && pinned ? pinned : undefined;
 
   useEffect(() => {
     setLoading(true);
@@ -77,11 +119,58 @@ export function NewsPage() {
       .finally(() => setLoading(false));
   }, [page, retryKey]);
 
+  useEffect(() => {
+    newsApi.getPinned().then(setPinned).catch(() => setPinned(null));
+  }, []);
+
   useEffect(() => { document.title = 'Новости — Конкурс СочиГУ'; }, []);
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <section className="relative ">
+      {/* ── Верхний блок: «Конкурс открыт» ── */}
+      {featured && (
+        <section className="border-b border-primary/10 bg-primary-light/50">
+          <div className="container mx-auto max-w-6xl px-4 py-10">
+            <motion.div
+              className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-sm font-semibold text-accent-foreground"
+              initial="hidden" animate="show" variants={fadeUp}
+            >
+              <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+              Конкурс открыт
+            </motion.div>
+
+            <div className="grid items-center gap-6 lg:grid-cols-5">
+              <div className="lg:col-span-3">
+                <FeaturedNews item={featured} />
+              </div>
+
+              <motion.div
+                className="flex flex-col gap-3 lg:col-span-2"
+                variants={stagger}
+                initial="hidden"
+                animate="show"
+              >
+                {contestLinks.map((link) => (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between rounded-xl border-2 border-primary/10 bg-white px-5 py-4 font-semibold text-primary shadow-sm transition-colors hover:border-primary/30 hover:shadow-md"
+                    variants={cardItem}
+                  >
+                    {link.label}
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  </motion.a>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Новости конкурса ── */}
+      <section className="relative">
         {/* <motion.img
             src={mascot} alt="" aria-hidden
             className="pointer-events-none absolute top-0 right-0 z-0 hidden h-[420px] w-auto select-none object-contain object-top md:block translate-x-1/4"
@@ -90,7 +179,6 @@ export function NewsPage() {
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
             style={{ animation: 'mascotFloat 4s ease-in-out infinite' }}
           /> */}
-      
 
         <div className="container relative z-10 mx-auto max-w-6xl px-4 py-10">
         <motion.h1

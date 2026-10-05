@@ -23,10 +23,11 @@ interface FormData {
   content: string;
   coverImage: string;
   isPublished: boolean;
+  isPinned: boolean;
   contestId: string;
 }
 
-const EMPTY: FormData = { title: '', slug: '', excerpt: '', content: '', coverImage: '', isPublished: false, contestId: '' };
+const EMPTY: FormData = { title: '', slug: '', excerpt: '', content: '', coverImage: '', isPublished: false, isPinned: false, contestId: '' };
 
 export function NewsManagePage() {
   useEffect(() => { document.title = 'Управление новостями — Конкурс СочиГУ'; }, []);
@@ -78,7 +79,7 @@ export function NewsManagePage() {
   const openCreate = () => { setEditing(null); reset(EMPTY); setPhotoError(''); setModalOpen(true); };
   const openEdit = (item: News) => {
     setEditing(item);
-    reset({ title: item.title, slug: item.slug, excerpt: item.excerpt ?? '', content: item.content, coverImage: item.coverImage ?? '', isPublished: item.isPublished, contestId: item.contestId ?? crypto.randomUUID() });
+    reset({ title: item.title, slug: item.slug, excerpt: item.excerpt ?? '', content: item.content, coverImage: item.coverImage ?? '', isPublished: item.isPublished, isPinned: !!item.isPinned, contestId: item.contestId ?? crypto.randomUUID() });
     setPhotoError('');
     setModalOpen(true);
   };
@@ -196,6 +197,14 @@ export function NewsManagePage() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" {...register('isPublished')} className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
             <span className="text-sm text-gray-700">Опубликовать сразу</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register('isPinned')}
+              className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <span className="text-sm text-gray-700">Закрепить наверху страницы новостей</span>
           </label>
           {contests.length > 0 && (
             <div>

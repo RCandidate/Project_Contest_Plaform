@@ -99,4 +99,8 @@ export class NewsController implements OnModuleInit {
   remove(@Param('id') id: string) {
     return this.newsService.remove(id);
   }
+  @Get('pinned')
+  getPinned() {
+    return this.newsService.getPinned(); // добавил закреп новости
+}
 }
