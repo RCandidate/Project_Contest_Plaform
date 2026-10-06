@@ -16,7 +16,7 @@ const LIMIT = 10;
 // ── Три ссылки справа от главной новости: впиши свои названия и адреса ──
 const contestLinks = [
   { label: 'Сайт СочиГУ', href: 'https://sochi.university/' },
-  { label: 'Канал СочиГУ в MAX', href: 'https://' },
+  { label: 'Канал СочиГУ в MAX', href: 'https://max.ru/id2320051199_biz' },
   { label: 'Telegram-канал СочиГУ', href: 'https://t.me/sochi_university' },
 ];
 
