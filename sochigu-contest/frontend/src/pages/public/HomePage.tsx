@@ -462,7 +462,7 @@ export function HomePage() {
         </motion.h2>
         <div className="mx-auto max-w-md">
           {[
-            { date: "До 30 октября", label: "Приём заявок" },
+            { date: "До 9 ноября", label: "Приём заявок" },
             { date: "Ноябрь", label: "Доработка проектов" },
             { date: "Декабрь", label: "Очная презентация" },
             { date: "Декабрь", label: "Награждение победителей" },
