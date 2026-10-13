@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Target, BookOpen, Users, Trophy, CheckCircle, ArrowRight, GraduationCap, Presentation, Award } from "lucide-react";
-import { fadeUp, fadeUpView, fadeIn, stagger, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
+import { fadeUp, fadeUpView, fadeIn, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
 
 import mascot1 from '../../../assets/mascot-about-contest.png';
 
