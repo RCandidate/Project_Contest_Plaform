@@ -62,7 +62,6 @@ export function ExpertsPage() {
             Экспертный совет
           </motion.h1>
         </div>
-        edit
       </section>
 
       <section className="container mx-auto px-2 py-8">
