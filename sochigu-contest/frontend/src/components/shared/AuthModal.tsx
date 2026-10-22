@@ -231,7 +231,7 @@ function RegisterForm({ onSuccess, onRegistered }: { onSuccess: () => void; onRe
           {errors.university && <p className="text-red-500 text-xs mt-0.5">{errors.university.message}</p>}
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Факультет/кафедра</label>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Институт/факультет/кафедра</label>
           <input type="text" {...register('faculty')} className={field} placeholder="ФИИЦТ" />
         </div>
       </div>
