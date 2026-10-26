@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../backend/src/common/utils/universities.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

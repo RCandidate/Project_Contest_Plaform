@@ -5,6 +5,8 @@ import { Application } from '../applications/entities/application.entity';
 import { User } from '../users/entities/user.entity';
 import { ApplicationLog } from '../applications/entities/application-log.entity';
 import { Role } from '../common/enums/role.enum';
+import { canonicalUniversity } from "../common/utils/universities";
+
 
 @Injectable()
 export class AnalyticsService {
@@ -31,11 +33,20 @@ export class AnalyticsService {
 
     const totalUsers = await this.userRepo.count({ where: { role: Role.PARTICIPANT } });
 
-    const universities = await this.userRepo
-      .createQueryBuilder('u')
-      .select('COUNT(DISTINCT u.university)', 'count')
-      .where("u.university IS NOT NULL AND u.university != '' AND u.role = :role", { role: Role.PARTICIPANT })
-      .getRawOne();
+    const uniRows = await this.userRepo
+      .createQueryBuilder("u")
+      .select("u.university", "university")
+      .where(
+        "u.university IS NOT NULL AND u.university != '' AND u.role = :role",
+        {
+          role: Role.PARTICIPANT,
+        },
+      )
+      .getRawMany();
+
+    const uniqueUniversities = new Set(
+      uniRows.map((r) => canonicalUniversity(r.university)).filter(Boolean),
+    );
 
     const teamStats = await this.appRepo.manager.query(`
       SELECT
@@ -49,7 +60,7 @@ export class AnalyticsService {
     return {
       totalApplications,
       totalUsers,
-      totalUniversities: +universities.count,
+      totalUniversities: uniqueUniversities.size,
       newThisWeek,
       underReview,
       teamApplications: Number(teamStats[0]?.team_applications ?? 0),
