@@ -12,6 +12,8 @@ import { ContactMessage } from '../contacts/entities/contact-message.entity';
 import { Contest } from '../contests/entities/contest.entity';
 import { BankTopic } from "../bank/entities/bank-topic.entity";
 import { BankOffer } from "../bank/entities/bank-offer.entity";
+import { BankComment } from "../bank/entities/bank-comment.entity";
+import { Score } from "../scores/entities/score.entity";
 
 
 export const databaseConfig = (
@@ -23,7 +25,7 @@ export const databaseConfig = (
   username: configService.get('DB_USER', 'sochigu'),
   password: configService.get('DB_PASS', 'sochigu_pass'),
   database: configService.get('DB_NAME', 'sochigu_contest'),
-  entities: [User, Nomination, Application, ApplicationLog, AppFile, News, Document, Winner, ContactMessage, Contest, BankTopic, BankOffer],
+  entities: [User, Nomination, Application, ApplicationLog, AppFile, News, Document, Winner, ContactMessage, Contest, BankTopic, BankOffer, BankComment, Score],
   synchronize: String(configService.get('DB_SYNCHRONIZE', 'false')).trim().toLowerCase() === 'true',
   logging: configService.get('NODE_ENV') === 'development',
   migrations: ['dist/database/migrations/*.js'],

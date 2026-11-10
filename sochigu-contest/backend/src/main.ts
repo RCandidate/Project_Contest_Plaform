@@ -2,6 +2,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { Request, Response, NextFunction } from "express";
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
@@ -42,10 +43,21 @@ async function bootstrap() {
       })(req, res, next);
     },
   );
+  const bankWriteLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: process.env.NODE_ENV === "production" ? 20 : 200,
+    message: { message: "Слишком много запросов. Попробуйте позже." },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use("/api/bank", (req: Request, res: Response, next: NextFunction) => {
+    if (req.method !== "POST") return next();
+    return bankWriteLimiter(req, res, next);
+  });
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: process.env.NODE_ENV === 'production' ? 200 : 2000,
+      max: process.env.NODE_ENV === "production" ? 200 : 2000,
     }),
   );
 

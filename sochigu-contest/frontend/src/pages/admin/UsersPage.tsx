@@ -9,6 +9,7 @@ const ROLE_LABELS: Record<string, string> = {
   expert: 'Эксперт',
   moderator: 'Модератор',
   admin: 'Администратор',
+  employer: 'Работодатель',
 };
 
 const ROLE_COLORS: Record<string, string> = {
@@ -16,6 +17,7 @@ const ROLE_COLORS: Record<string, string> = {
   expert:      'bg-purple-100 text-purple-800',
   moderator:   'bg-orange-100 text-orange-800',
   admin:       'bg-red-100 text-red-800',
+  employer:    'bg-teal-100 text-teal-800'
 };
 
 function formatDate(str: string) {

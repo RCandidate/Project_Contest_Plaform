@@ -16,6 +16,8 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { MailModule } from './mail/mail.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { ContestsModule } from './contests/contests.module';
+import { BankModule } from "./bank/bank.module";
+import { ScoresModule } from "./scores/scores.module";
 
 @Module({
   imports: [
@@ -25,8 +27,8 @@ import { ContestsModule } from './contests/contests.module';
       useFactory: databaseConfig,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads',
+      rootPath: join(__dirname, "..", "uploads"),
+      serveRoot: "/uploads",
     }),
     AuthModule,
     UsersModule,
@@ -40,6 +42,9 @@ import { ContestsModule } from './contests/contests.module';
     MailModule,
     ContactsModule,
     ContestsModule,
+    ContestsModule,
+    BankModule,
+    ScoresModule,
   ],
 })
 export class AppModule {}

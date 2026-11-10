@@ -13,14 +13,15 @@ const spring = { type: 'spring' as const, stiffness: 300, damping: 22 };
 const hoverNav = { whileHover: { scale: 1.07, transition: spring }, whileTap: { scale: 0.96 } };
 
 const navLinks = [
-  { to: '/', label: 'Главная' },
-  { to: '/about', label: 'О конкурсе' },
-  { to: '/nominations', label: 'Номинации' },
-  { to: '/experts', label: 'Экспертный совет' },
-  { to: '/news', label: 'Новости' },
-  { to: '/documents', label: 'Документы' },
-  { to: '/winners', label: 'Победители' },
-  { to: '/contacts', label: 'Контакты' },
+  { to: "/", label: "Главная" },
+  { to: "/about", label: "О конкурсе" },
+  { to: "/nominations", label: "Номинации" },
+  { to: "/experts", label: "Экспертный совет" },
+  { to: "/news", label: "Новости" },
+  { to: "/documents", label: "Документы" },
+  { to: "/winners", label: "Победители" },
+  { to: "/bank", label: "Банк работ" },
+  { to: "/contacts", label: "Контакты" },
 ];
 
 export function Header() {
@@ -31,7 +32,9 @@ export function Header() {
 
   const handleLogout = async () => { await authApi.logout(); navigate('/'); };
   const cabinetPath = user?.role === 'admin' || user?.role === 'moderator' || user?.role === 'expert' ? '/admin' : '/cabinet';
-
+  const isEmployer = user?.role === "employer";
+  const accountPath = isEmployer ? "/bank/my-offers" : cabinetPath;
+  const accountLabel = isEmployer ? "Мои предложения" : "Личный кабинет";
   return (
     <header className="sticky top-0 z-50 bg-primary shadow-lg">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
@@ -43,7 +46,7 @@ export function Header() {
         <nav className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => (
             <MotionLink key={link.to} to={link.to}
-              className="rounded-md px-3 py-2 text-sm font-medium text-primary-foreground/80 transition-colors hover:bg-white hover:text-primary"
+              className="rounded-md px-2 xl:px-3 py-2 text-sm font-medium text-primary-foreground/80 transition-colors hover:bg-white hover:text-primary"
               {...hoverNav}>
               {link.label}
             </MotionLink>
@@ -53,7 +56,7 @@ export function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           {user ? (
             <>
-              <MotionLink to={cabinetPath}
+              <MotionLink to={accountPath}
                 className="rounded-lg border border-primary-foreground/30 px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-white hover:text-primary hover:border-white"
                 {...hoverBtn}>
                 Личный кабинет
@@ -98,7 +101,7 @@ export function Header() {
           <div className="mt-3 flex flex-col gap-2 border-t border-primary-mid pt-3">
             {user ? (
               <>
-                <Link to={cabinetPath} onClick={() => setMobileOpen(false)}
+                <Link to={accountPath} onClick={() => setMobileOpen(false)}
                   className="rounded-lg border border-primary-foreground/30 px-4 py-2 text-center text-sm font-medium text-primary-foreground">
                   Личный кабинет
                 </Link>

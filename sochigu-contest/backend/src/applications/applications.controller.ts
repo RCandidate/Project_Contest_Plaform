@@ -13,29 +13,34 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Role } from '../common/enums/role.enum';
 
-@Controller('applications')
-@UseGuards(JwtAuthGuard)
+@Controller("applications")
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.PARTICIPANT, Role.EXPERT, Role.MODERATOR, Role.ADMIN)
 export class ApplicationsController {
   constructor(private service: ApplicationsService) {}
 
   @Post()
-  create(@CurrentUser('id') userId: string, @Body() dto: CreateApplicationDto) {
+  create(@CurrentUser("id") userId: string, @Body() dto: CreateApplicationDto) {
     return this.service.create(userId, dto);
   }
 
-  @Get('my')
-  findMy(@CurrentUser('id') userId: string) {
+  @Get("my")
+  findMy(@CurrentUser("id") userId: string) {
     return this.service.findByUser(userId);
   }
 
-  @Get('export/excel')
+  @Get("export/excel")
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.MODERATOR)
-  async exportExcel(@Query() query: GetApplicationsDto, @Res() res: Response): Promise<void> {
+  async exportExcel(
+    @Query() query: GetApplicationsDto,
+    @Res() res: Response,
+  ): Promise<void> {
     const buffer = await this.service.exportToExcel(query);
     res.set({
-      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'Content-Disposition': `attachment; filename="applications-${Date.now()}.xlsx"`,
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": `attachment; filename="applications-${Date.now()}.xlsx"`,
     });
     res.send(buffer);
   }
@@ -47,44 +52,44 @@ export class ApplicationsController {
     return this.service.findAll(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUser() user: any) {
+  @Get(":id")
+  findOne(@Param("id") id: string, @CurrentUser() user: any) {
     const userId = user.role === Role.PARTICIPANT ? user.id : undefined;
     return this.service.findById(id, userId);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
+    @Param("id") id: string,
+    @CurrentUser("id") userId: string,
     @Body() dto: UpdateApplicationDto,
   ) {
     return this.service.update(id, userId, dto);
   }
 
-  @Post(':id/submit')
-  submit(@Param('id') id: string, @CurrentUser('id') userId: string) {
+  @Post(":id/submit")
+  submit(@Param("id") id: string, @CurrentUser("id") userId: string) {
     return this.service.submit(id, userId);
   }
 
-  @Patch(':id/status')
+  @Patch(":id/status")
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN, Role.MODERATOR, Role.EXPERT)
   updateStatus(
-    @Param('id') id: string,
-    @CurrentUser('id') adminId: string,
+    @Param("id") id: string,
+    @CurrentUser("id") adminId: string,
     @Body() dto: UpdateStatusDto,
   ) {
     return this.service.updateStatus(id, adminId, dto);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string, @CurrentUser('id') userId: string) {
+  @Delete(":id")
+  delete(@Param("id") id: string, @CurrentUser("id") userId: string) {
     return this.service.delete(id, userId);
   }
 
-  @Post(':id/withdraw')
-  withdraw(@Param('id') id: string, @CurrentUser('id') userId: string) {
+  @Post(":id/withdraw")
+  withdraw(@Param("id") id: string, @CurrentUser("id") userId: string) {
     return this.service.withdraw(id, userId);
   }
 }

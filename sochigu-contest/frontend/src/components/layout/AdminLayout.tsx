@@ -1,7 +1,22 @@
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
 import { BackToTopButton } from '@/components/shared/BackToTopButton';
-import { LayoutDashboard, FileText, Users, BarChart3, Newspaper, FolderOpen, Trophy, Tag, UserCog, ExternalLink, LogOut, MessageSquare, CalendarRange } from 'lucide-react';
+import {
+  LayoutDashboard,
+  FileText,
+  Users,
+  BarChart3,
+  Newspaper,
+  FolderOpen,
+  Trophy,
+  Tag,
+  UserCog,
+  ExternalLink,
+  LogOut,
+  MessageSquare,
+  CalendarRange,
+  Briefcase,
+} from "lucide-react";
 import logoWhite from '@/logo_white.png';
 import type { Role } from '@/types';
 
@@ -16,6 +31,7 @@ const sidebarLinks: { to: string; label: string; icon: React.ElementType; exact?
   { to: '/admin/cms/nominations', label: 'Номинации',  icon: Tag,                           roles: ['admin', 'moderator'] },
   { to: '/admin/experts',       label: 'Эксперты',     icon: UserCog,                       roles: ['admin', 'moderator'] },
   { to: '/admin/contacts',      label: 'Обращения',    icon: MessageSquare,                 roles: ['admin', 'moderator'] },
+  { to: '/bank',                label: 'Банк работ',   icon: Briefcase,                     roles: ['admin', 'moderator'] },
   { to: '/admin/cms/contests',  label: 'Конкурсы',     icon: CalendarRange,                  roles: ['admin'] },
 ];
 

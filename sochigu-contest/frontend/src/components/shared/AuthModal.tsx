@@ -25,9 +25,14 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
       setError(null);
       onSuccess();
       const role = useAuthStore.getState().user?.role;
-      const dest = role === 'admin' || role === 'moderator' ? '/admin'
-        : role === 'expert' ? '/admin/applications'
-        : '/cabinet';
+      const dest =
+        role === "admin" || role === "moderator"
+          ? "/admin"
+          : role === "expert"
+            ? "/admin/applications"
+            : role === "employer"
+              ? "/bank"
+              : "/cabinet";
       navigate(dest, { replace: true });
     } catch (err: any) {
       const raw = err?.response?.data?.message;

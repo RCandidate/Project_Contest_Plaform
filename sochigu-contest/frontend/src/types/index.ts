@@ -1,4 +1,4 @@
-export type Role = 'participant' | 'expert' | 'moderator' | 'admin';
+export type Role = "participant" | "expert" | "moderator" | "admin" | "employer";
 
 export interface Contest {
   id: string;
@@ -220,4 +220,134 @@ export interface ContactMessage {
   message: string;
   status: ContactMessageStatus;
   createdAt: string;
+}
+
+
+// ─── Банк работ ──────────────────────────────────────────────────────────────
+
+export interface BankProject {
+  id: string;
+  title: string;
+  summary: string;
+  description?: string;
+  keywords: string[];
+  nomination: { id: string; name: string; shortName?: string } | null;
+  contest: { id: string; name: string } | null;
+  status: ApplicationStatus;
+  teamSize: number;
+  createdAt: string;
+}
+
+export type BankTopicStatus =
+  | "pending"
+  | "published"
+  | "taken"
+  | "rejected"
+  | "archived";
+
+export interface BankTopic {
+  id: string;
+  title: string;
+  description: string;
+  organization: string;
+  status?: BankTopicStatus;
+  moderationComment?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  createdAt: string;
+  author?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  } | null;
+}
+
+export type BankOfferStatus = 'new' | 'viewed' | 'accepted' | 'declined';
+
+export interface BankOffer {
+  id: string;
+  applicationId: string;
+  message: string;
+  status: BankOfferStatus;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  createdAt: string;
+  application?: { id: string; projectTitle: string };
+  employer?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email?: string;
+  };
+}
+
+export type BankCommentAuthorKind = "employer" | "owner" | "staff" | "unknown";
+
+export interface BankComment {
+  id: string;
+  text: string;
+  createdAt: string;
+  author: { id: string; firstName: string; lastName: string } | null;
+  authorKind: BankCommentAuthorKind;
+}
+
+export const BANK_COMMENT_AUTHOR_LABELS: Record<BankCommentAuthorKind, string> =
+  {
+    employer: "Работодатель",
+    owner: "Автор проекта",
+    staff: "Модератор",
+    unknown: "",
+  };
+
+
+export const BANK_TOPIC_STATUS_LABELS: Record<BankTopicStatus, string> = {
+  pending: "На модерации",
+  published: "Опубликована",
+  rejected: "Отклонена",
+  archived: "В архиве",
+  taken: "Занята",
+};
+
+export const BANK_TOPIC_STATUS_COLORS: Record<BankTopicStatus, string> = {
+  pending: "bg-yellow-100 text-yellow-800",
+  published: "bg-green-100 text-green-800",
+  rejected: "bg-red-100 text-red-800",
+  archived: "bg-gray-100 text-gray-700",
+  taken: "bg-gray-200 text-gray-700",
+};
+
+export const BANK_OFFER_STATUS_LABELS: Record<BankOfferStatus, string> = {
+  new: 'Новое',
+  viewed: 'Просмотрено',
+  accepted: 'Принято',
+  declined: 'Отклонено',
+};
+
+export const BANK_OFFER_STATUS_COLORS: Record<BankOfferStatus, string> = {
+  new: 'bg-blue-100 text-blue-800',
+  viewed: 'bg-gray-100 text-gray-700',
+  accepted: 'bg-green-100 text-green-800',
+  declined: 'bg-red-100 text-red-800',
+};
+
+// ─── Оценки экспертов ────────────────────────────────────────────────────────
+
+export interface ScoreQuality {
+  code: string;
+  label: string;
+}
+
+export interface Score {
+  applicationId: string;
+  expertId: string;
+  points: number;
+  qualities: string[];
+  specialOpinion: string | null;
+}
+
+export interface ScoreMatrix {
+  experts: { id: string; firstName: string; lastName: string }[];
+  projects: { id: string; projectTitle: string; nomination: string | null }[];
+  scores: Score[];
 }

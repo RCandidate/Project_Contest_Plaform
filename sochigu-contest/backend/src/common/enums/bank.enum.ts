@@ -1,6 +1,7 @@
 export enum BankTopicStatus {
   PENDING = "pending",
   PUBLISHED = "published",
+  TAKEN = "taken",
   REJECTED = "rejected",
   ARCHIVED = "archived",
 }
