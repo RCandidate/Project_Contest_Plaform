@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuthStore } from '@/store/auth.store';
 import { useUiStore } from '@/store/ui.store';
-import { GraduationCap, Users, Gift, Trophy, ArrowRight, Calendar, CheckCircle, Presentation, Award } from "lucide-react";
+import { GraduationCap, Users, Gift, Trophy, ArrowRight, Calendar, CheckCircle, Presentation, Award, LifeBuoy, Landmark } from "lucide-react";
 import { fadeUp, fadeUpView, fadeIn, staggerView, cardItem, hoverCard, hoverBtn } from '@/utils/animations';
 
 
@@ -21,7 +21,7 @@ import phototabak from '../../../assets/Tabak_LV.webp';
 import photobalabanova from '../../../assets/Balabanova_AO.webp';
 import photozenkova from '../../../assets/Zenkova_TL.webp';
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 export function HomePage() {
   useEffect(() => { document.title = 'Главная — Конкурс СочиГУ'; }, []);
@@ -131,10 +131,9 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ── Stat cards ── */}
       <section className="container relative z-10 mx-auto -mt-16 px-4">
         <motion.div
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
           variants={staggerView}
           initial="hidden"
           whileInView="show"
@@ -157,24 +156,78 @@ export function HomePage() {
               label: "Денежные гранты",
               desc: "Для победителей и призёров",
             },
-          ].map((stat) => (
-            <motion.div
-              key={stat.label}
-              className="flex items-start gap-4 rounded-xl bg-card p-5 shadow-md relative "
-              variants={cardItem}
-              {...hoverCard}
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent">
-                <stat.icon className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-lg font-bold text-foreground">
-                  {stat.label}
-                </p>
-                <p className="text-sm text-muted-foreground">{stat.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+            {
+              icon: LifeBuoy,
+              label: "Персонализированная подготовка",
+              desc: "Интеллектуальный программный комплекс",
+              href: "https://ipk-alinarafaelevna.msk1.amvera.tech",
+            },
+            {
+              icon: Landmark,
+              label: "Банк работ",
+              desc: "Все работы конкурсов",
+              href: "/bank",
+            },
+          ].map((stat) => {
+            const className = `relative flex min-w-0 items-start gap-4 rounded-xl bg-card p-5 shadow-md ${
+              stat.href ? "cursor-pointer" : ""
+            }`;
+
+            const content = (
+              <>
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent">
+                  <stat.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-lg font-bold text-foreground">
+                    {stat.label}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{stat.desc}</p>
+                </div>
+              </>
+            );
+
+            if (!stat.href) {
+              return (
+                <motion.div
+                  key={stat.label}
+                  className={className}
+                  variants={cardItem}
+                  {...hoverCard}
+                >
+                  {content}
+                </motion.div>
+              );
+            }
+
+            if (stat.href.startsWith("/")) {
+              return (
+                <MotionLink
+                  key={stat.label}
+                  to={stat.href}
+                  className={className}
+                  variants={cardItem}
+                  {...hoverCard}
+                >
+                  {content}
+                </MotionLink>
+              );
+            }
+
+            return (
+              <motion.a
+                key={stat.label}
+                href={stat.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={className}
+                variants={cardItem}
+                {...hoverCard}
+              >
+                {content}
+              </motion.a>
+            );
+          })}
         </motion.div>
       </section>
 
@@ -518,8 +571,8 @@ export function HomePage() {
                 Зенкова Татьяна Леонидовна
               </p>
               <p className="mt-1 text-sm text-muted-foreground leading-snug">
-                исполняющий обязанности заведующего кафедрой романо-германской и русской филологии,
-                кандидат филологических наук, доцент
+                исполняющий обязанности заведующего кафедрой романо-германской и
+                русской филологии, кандидат филологических наук, доцент
               </p>
             </div>
           </motion.div>
