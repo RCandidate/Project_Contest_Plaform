@@ -138,7 +138,7 @@ export default function App() {
             <Route
               path="/admin/analytics"
               element={
-                <RoleGuard roles={["admin", "moderator"]}>
+                <RoleGuard roles={["admin", "moderator", "expert"]}>
                   <AnalyticsPage />
                 </RoleGuard>
               }

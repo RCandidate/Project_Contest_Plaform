@@ -25,7 +25,7 @@ const sidebarLinks: { to: string; label: string; icon: React.ElementType; exact?
   { to: '/admin',               label: 'Дашборд',      icon: LayoutDashboard, exact: true, roles: ['admin', 'moderator'] },
   { to: '/admin/applications',  label: 'Заявки',        icon: FileText,                     roles: ['admin', 'moderator', 'expert'] },
   { to: '/admin/users',         label: 'Пользователи', icon: Users,                         roles: ['admin', 'moderator'] },
-  { to: '/admin/analytics',     label: 'Аналитика',    icon: BarChart3,                     roles: ['admin', 'moderator'] },
+  { to: '/admin/analytics',     label: 'Аналитика',    icon: BarChart3,                     roles: ['admin', 'moderator', 'expert'] },
   { to: '/admin/scores',        label: 'Оценки',       icon: ClipboardList,                 roles: ['admin'], hideIfNoAccess: true },
   { to: '/admin/cms/news',      label: 'Новости',       icon: Newspaper,                    roles: ['admin', 'moderator'] },
   { to: '/admin/cms/documents', label: 'Документы',    icon: FolderOpen,                    roles: ['admin', 'moderator'] },

@@ -9,7 +9,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 @Controller('analytics')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.MODERATOR)
+@Roles(Role.ADMIN, Role.MODERATOR, Role.EXPERT)
 export class AnalyticsController {
   constructor(private analyticsService: AnalyticsService) {}
 
