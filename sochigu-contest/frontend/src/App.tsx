@@ -33,6 +33,7 @@ import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { ApplicationsListPage } from '@/pages/admin/ApplicationsListPage';
 import { ApplicationDetailPage } from '@/pages/admin/ApplicationDetailPage';
 import { UsersPage } from '@/pages/admin/UsersPage';
+import { ScoresMatrixPage } from "@/pages/admin/ScoresMatrixPage";
 const AnalyticsPage = lazy(() => import('@/pages/admin/AnalyticsPage').then(m => ({ default: m.AnalyticsPage })));
 import { NewsManagePage } from '@/pages/admin/cms/NewsManagePage';
 import { DocumentsManagePage } from '@/pages/admin/cms/DocumentsManagePage';
@@ -147,6 +148,14 @@ export default function App() {
               element={
                 <RoleGuard roles={["admin", "moderator"]}>
                   <NewsManagePage />
+                </RoleGuard>
+              }
+            />
+            <Route
+              path="/admin/scores"
+              element={
+                <RoleGuard roles={["admin"]}>
+                  <ScoresMatrixPage />
                 </RoleGuard>
               }
             />

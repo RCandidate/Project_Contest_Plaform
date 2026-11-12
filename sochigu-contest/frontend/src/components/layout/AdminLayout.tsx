@@ -16,15 +16,17 @@ import {
   MessageSquare,
   CalendarRange,
   Briefcase,
+  ClipboardList,
 } from "lucide-react";
 import logoWhite from '@/logo_white.png';
 import type { Role } from '@/types';
 
-const sidebarLinks: { to: string; label: string; icon: React.ElementType; exact?: boolean; roles: Role[] }[] = [
+const sidebarLinks: { to: string; label: string; icon: React.ElementType; exact?: boolean; roles: Role[] ; hideIfNoAccess?: boolean}[] = [
   { to: '/admin',               label: 'Дашборд',      icon: LayoutDashboard, exact: true, roles: ['admin', 'moderator'] },
   { to: '/admin/applications',  label: 'Заявки',        icon: FileText,                     roles: ['admin', 'moderator', 'expert'] },
   { to: '/admin/users',         label: 'Пользователи', icon: Users,                         roles: ['admin', 'moderator'] },
   { to: '/admin/analytics',     label: 'Аналитика',    icon: BarChart3,                     roles: ['admin', 'moderator'] },
+  { to: '/admin/scores',        label: 'Оценки',       icon: ClipboardList,                 roles: ['admin'], hideIfNoAccess: true },
   { to: '/admin/cms/news',      label: 'Новости',       icon: Newspaper,                    roles: ['admin', 'moderator'] },
   { to: '/admin/cms/documents', label: 'Документы',    icon: FolderOpen,                    roles: ['admin', 'moderator'] },
   { to: '/admin/cms/winners',   label: 'Победители',   icon: Trophy,                        roles: ['admin', 'moderator'] },
@@ -57,6 +59,7 @@ export function AdminLayout() {
             const hasAccess = !user || link.roles.includes(user.role);
 
             if (!hasAccess) {
+              if (link.hideIfNoAccess) return null;
               return (
                 <span key={link.to}
                   title="Нет доступа"
