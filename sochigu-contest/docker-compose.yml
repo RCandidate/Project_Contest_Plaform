@@ -1,0 +1,53 @@
+# Продакшн-запуск.
+# На сервере:
+#   cp backend/.env.prod.example backend/.env  # заполнить реальными значениями
+#   docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sochigu_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sochigu_contest
+      POSTGRES_USER: sochigu
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U sochigu -d sochigu_contest']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Postgres не светим наружу — только внутри docker-сети
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sochigu_backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads
+    # Backend не светим наружу — nginx проксирует /api/
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sochigu_frontend
+    restart: unless-stopped
+    ports:
+      - '8890:80'
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+    name: sochigu_pgdata
+  uploads:
+    name: sochigu_uploads

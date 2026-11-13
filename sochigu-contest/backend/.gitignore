@@ -1,0 +1,19 @@
+# Зависимости
+node_modules/
+
+# Сборка
+dist/
+
+# Переменные окружения
+.env
+.env.local
+.env.*.local
+
+# Загруженные пользователями файлы
+uploads/
+
+# Логи
+*.log
+
+# Кэш TypeScript
+*.tsbuildinfo

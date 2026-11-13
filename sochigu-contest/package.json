@@ -1,0 +1,24 @@
+{
+  "name": "sochigu-contest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo root — управление запуском проекта",
+  "scripts": {
+    "setup": "node setup.js",
+    "dev": "concurrently --names \"DB,BACKEND,FRONTEND\" --prefix-colors \"yellow,cyan,green\" \"docker compose -f docker-compose.dev.yml up\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "wait-on tcp:5432 && cd backend && npm run start:dev",
+    "dev:frontend": "wait-on tcp:3002 -t 120000 && cd frontend && npm run dev",
+    "db:up": "docker compose -f docker-compose.dev.yml up",
+    "db:down": "docker compose -f docker-compose.dev.yml down",
+    "db:reset": "docker compose -f docker-compose.dev.yml down -v && docker compose -f docker-compose.dev.yml up",
+    "prod": "docker compose up -d --build",
+    "prod:down": "docker compose down",
+    "prod:logs": "docker compose logs -f",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
+  }
+}
