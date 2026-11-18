@@ -14,6 +14,7 @@ import { Roles } from "../common/decorators/roles.decorator";
 import { Role } from "../common/enums/role.enum";
 import { FileCategory } from "../common/enums/file-type.enum";
 import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { ApplicationStatus } from "../common/enums/application-status.enum";
 
 @Controller("files")
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -54,10 +55,14 @@ export class FilesController {
   }
 
   @Delete(":id")
+  @Roles(Role.PARTICIPANT, Role.MODERATOR, Role.ADMIN)
   async remove(@Param("id") id: string, @CurrentUser() user: any) {
     const file = await this.filesService.findById(id);
-    if (user.role === "participant" && file.application?.userId !== user.id) {
-      throw new ForbiddenException();
+    if (user.role === "participant") {
+      if (file.application?.userId !== user.id) throw new ForbiddenException();
+      if (file.application.status !== ApplicationStatus.DRAFT) {
+        throw new ForbiddenException("Файлы можно удалять только из черновика заявки");
+      }
     }
     return this.filesService.remove(id);
   }

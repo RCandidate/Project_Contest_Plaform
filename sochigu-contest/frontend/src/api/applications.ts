@@ -21,6 +21,7 @@ export const applicationsApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then(r => r.data);
   },
+  deleteFile: (fileId: string) => apiClient.delete(`/files/${fileId}`).then(r => r.data),
   downloadFile: (fileId: string) =>
     apiClient.get(`/files/${fileId}/download`, { responseType: 'blob' }).then(r => r.data),
   downloadFileUrl: (fileId: string) => `/api/files/${fileId}/download`,

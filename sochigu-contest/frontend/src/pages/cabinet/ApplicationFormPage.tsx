@@ -7,9 +7,16 @@ import { nominationsApi } from '@/api/nominations';
 import { Nomination, AppFile, TeamMember, CreateApplicationDto } from '@/types';
 import { Spinner } from '@/components/shared/Spinner';
 import { Alert } from '@/components/ui/Alert';
+import { Modal } from '@/components/shared/Modal';
+import { formatSize } from '@/utils/format';
+import { getApiErrorMessage } from '@/utils/apiError';
 
 const MAX_FILE_SIZE_MB = 6;
-const MAX_FILES_PER_CATEGORY = 6;
+const MAX_FILES_TOTAL = 6;
+const FILE_CATEGORY_LABELS: Record<string, string> = {
+  project_file: 'Файл проекта',
+  document_scan: 'Скан документа',
+};
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -54,6 +61,8 @@ export function ApplicationFormPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([{ name: '', role: '', email: '' }]);
   const [supervisor, setSupervisor] = useState({ name: '', title: '', email: '' });
   const [uploadedFiles, setUploadedFiles] = useState<AppFile[]>([]);
+  const [fileToDelete, setFileToDelete] = useState<AppFile | null>(null);
+  const [deletingFile, setDeletingFile] = useState(false);
   const [appId, setAppId] = useState<string | null>(id ?? null);
   const [saving, setSaving] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -168,6 +177,21 @@ export function ApplicationFormPage() {
   };
 
   const addMember = () => setTeamMembers(t => [...t, { name: '', role: '', email: '' }]);
+  const handleFileDelete = async () => {
+  if (!fileToDelete) return;
+  const target = fileToDelete;
+  setError(null);
+  setDeletingFile(true);
+  try {
+    await applicationsApi.deleteFile(target.id);
+    setUploadedFiles(prev => prev.filter(f => f.id !== target.id));
+  } catch (err) {
+    setError(getApiErrorMessage(err, 'Не удалось удалить файл. Попробуйте ещё раз.'));
+  } finally {
+    setDeletingFile(false);
+    setFileToDelete(null);
+  }
+};
   const removeMember = (i: number) => setTeamMembers(t => t.filter((_, idx) => idx !== i));
   const updateMember = (i: number, field: keyof TeamMember, value: string) =>
     setTeamMembers(t => t.map((m, idx) => idx === i ? { ...m, [field]: value } : m));
@@ -377,7 +401,7 @@ export function ApplicationFormPage() {
               accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.rar"
               category="project_file"
               currentCount={uploadedFiles.length}
-              maxFiles={MAX_FILES_PER_CATEGORY}
+              maxFiles={MAX_FILES_TOTAL}
               onUpload={handleFileUpload}
             />
             <FileUploadZone
@@ -386,19 +410,31 @@ export function ApplicationFormPage() {
               accept=".pdf,.jpg,.jpeg,.png"
               category="document_scan"
               currentCount={uploadedFiles.length}
-              maxFiles={MAX_FILES_PER_CATEGORY}
+              maxFiles={MAX_FILES_TOTAL}
               onUpload={handleFileUpload}
             />
             {uploadedFiles.length > 0 && (
               <div>
-                <p className="mb-2 text-sm font-medium text-foreground">Загруженные файлы</p>
+                <p className="mb-2 text-sm font-medium text-foreground">
+                  Загруженные файлы ({uploadedFiles.length}/{MAX_FILES_TOTAL})
+                </p>
                 <div className="space-y-2">
                   {uploadedFiles.map(f => (
-                    <div key={f.id} className="flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm">
-                      <span className="truncate text-foreground">{f.originalName}</span>
-                      <span className="ml-2 text-muted-foreground">
-                        {f.size >= 1048576 ? `${(f.size / 1048576).toFixed(1)} МБ` : `${Math.round(f.size / 1024)} КБ`}
-                      </span>
+                    <div key={f.id} className="flex items-center justify-between gap-3 rounded-lg bg-muted px-3 py-2 text-sm">
+                      <div className="min-w-0">
+                        <p className="truncate text-foreground">{f.originalName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {FILE_CATEGORY_LABELS[f.category] ?? 'Файл'} · {formatSize(f.size)}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setFileToDelete(f)}
+                        disabled={deletingFile}
+                        className="flex-shrink-0 font-medium text-destructive hover:underline disabled:opacity-50"
+                      >
+                        Удалить
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -494,6 +530,21 @@ export function ApplicationFormPage() {
           </div>
         )}
       </div>
+      <Modal isOpen={!!fileToDelete} onClose={() => { if (!deletingFile) setFileToDelete(null); }} title="Удалить файл?">
+        <p className="mb-6 text-sm text-gray-600">
+          Файл «{fileToDelete?.originalName}» будет удалён безвозвратно. Остальные данные заявки не изменятся.
+        </p>
+        <div className="flex justify-end gap-3">
+          <button type="button" onClick={() => setFileToDelete(null)} disabled={deletingFile}
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-60">
+            Отмена
+          </button>
+          <button type="button" onClick={handleFileDelete} disabled={deletingFile}
+            className="rounded-lg bg-destructive px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+            {deletingFile ? 'Удаляем...' : 'Удалить'}
+          </button>
+        </div>
+      </Modal>
     </motion.div>
   );
 }
