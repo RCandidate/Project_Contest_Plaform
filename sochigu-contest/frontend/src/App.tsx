@@ -112,7 +112,7 @@ export default function App() {
               path="/admin"
               element={
                 <RoleGuard
-                  roles={["admin", "moderator"]}
+                  roles={["admin", "moderator", "expert"]}
                   redirectTo="/admin/applications"
                 >
                   <AdminDashboardPage />
