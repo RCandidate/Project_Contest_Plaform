@@ -7,6 +7,7 @@ import { Spinner } from '@/components/shared/Spinner';
 import { useToast } from "@/hooks/useToast";
 import { useAuthStore } from "@/store/auth.store";
 import { MyScoreForm } from "@/components/admin/scores/MyScoreForm";
+import { ApplicationThread } from "@/components/applications/ApplicationThread";
 import { formatSize } from '@/utils/format';
 
 const STATUSES: ApplicationStatus[] = ['draft','submitted','accepted','rejected','admitted','winner','runner_up'];
@@ -115,6 +116,7 @@ export function ApplicationDetailPage() {
       {user?.role === "expert" && (
         <MyScoreForm applicationId={app.id} isDraft={app.status === "draft"} />
       )}
+      <ApplicationThread key={app.id} applicationId={app.id} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">

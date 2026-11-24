@@ -54,6 +54,22 @@ async function bootstrap() {
     if (req.method !== "POST") return next();
     return bankWriteLimiter(req, res, next);
   });
+  const messageWriteLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: process.env.NODE_ENV === "production" ? 30 : 300,
+    message: { message: "Слишком много сообщений. Попробуйте позже." },
+    standardHeaders: true,
+  });
+  app.use(
+    "/api/application-messages",
+    (req: Request, res: Response, next: NextFunction) => {
+      if (req.method !== "POST" || req.path.endsWith("/read")) return next();
+      return messageWriteLimiter(req, res, next);
+    },
+  );
+
+
+
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000,

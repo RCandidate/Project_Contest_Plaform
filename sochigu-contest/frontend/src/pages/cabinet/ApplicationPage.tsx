@@ -7,6 +7,8 @@ import { StatusBadge } from '@/components/shared/StatusBadge';
 import { Spinner } from '@/components/shared/Spinner';
 import { Modal } from '@/components/shared/Modal';
 import { Alert } from '@/components/ui/Alert';
+import { ApplicationThread } from '@/components/applications/ApplicationThread';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import { useToast } from '@/hooks/useToast';
 import { formatDate, formatSize } from '@/utils/format';
 import { stagger, cardItem } from '@/utils/animations';
@@ -40,6 +42,7 @@ export function ApplicationPage() {
   const [error, setError] = useState<string | null>(null);
   const [confirmModal, setConfirmModal] = useState<{ action: 'submit' | 'withdraw' | 'delete' } | null>(null);
   const { showToast } = useToast();
+  const { map: unread } = useUnreadMessages();
 
   const fetchApps = useCallback(async () => {
     const fresh = await applicationsApi.getMy();
@@ -125,6 +128,11 @@ export function ApplicationPage() {
               className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 i === selectedIdx ? 'bg-primary text-primary-foreground' : 'border border-border text-foreground hover:bg-muted'
               }`}>
+              {unread[a.id] > 0 && (
+                <span className="ml-2 inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground">
+                  {unread[a.id]}
+                </span>
+              )}
               {a.projectTitle}
             </button>
           ))}
@@ -256,6 +264,14 @@ export function ApplicationPage() {
           </div>
         </motion.div>
       ) : null}
+      <motion.div variants={cardItem}>
+        <ApplicationThread
+          key={app.id}
+          applicationId={app.id}
+          canWrite={app.status !== 'draft'}
+          readOnlyReason="Переписка откроется после подачи заявки."
+        />
+      </motion.div>
 
       {/* История статусов */}
       {app.logs?.length ? (

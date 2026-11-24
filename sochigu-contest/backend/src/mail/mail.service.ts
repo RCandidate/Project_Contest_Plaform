@@ -98,4 +98,34 @@ export class MailService {
       `,
     });
   }
+  async sendThreadMessage(
+    recipient: { email: string; firstName: string },
+   application: { id: string; projectTitle: string },
+    forParticipant: boolean,
+  ) {
+    if (!this.transporter) return;
+    if (!recipient?.email) return;
+
+    const base = this.configService.get('FRONTEND_URL');
+    const url = forParticipant
+      ? `${base}/cabinet/application`
+      : `${base}/admin/applications/${application.id}`;
+    const intro = forParticipant
+      ? 'По вашей заявке есть новое сообщение от организаторов конкурса.'
+      : 'В переписке по заявке появилось новое сообщение от участника.';
+
+    await this.transporter.sendMail({
+      from: `"Конкурс СочиГУ" <${this.configService.get('SMTP_USER')}>`,
+      to: recipient.email,
+      subject: 'Новое сообщение по заявке — Конкурс СочиГУ',
+      html: `
+        <h2>Здравствуйте, ${escapeHtml(recipient.firstName)}!</h2>
+        <p>${intro}</p>
+        <p>Проект: <strong>${escapeHtml(application.projectTitle)}</strong></p>
+        <p><a href="${url}">Открыть переписку</a></p>
+        <p style="color:#999;font-size:12px;">Чтобы не отправлять много писем подряд, уведомления о новых сообщениях в одной заявке приходят не чаще одного раза в 10 минут.</p>
+      `,
+   });
+  }
+
 }

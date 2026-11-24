@@ -18,6 +18,8 @@ import { ContactsModule } from './contacts/contacts.module';
 import { ContestsModule } from './contests/contests.module';
 import { BankModule } from "./bank/bank.module";
 import { ScoresModule } from "./scores/scores.module";
+import { ApplicationMessagesModule } from "./application-messages/application-messages.module";
+
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { ScoresModule } from "./scores/scores.module";
     ContestsModule,
     BankModule,
     ScoresModule,
+    ApplicationMessagesModule,
   ],
 })
 export class AppModule {}

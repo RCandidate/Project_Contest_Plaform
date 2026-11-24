@@ -5,6 +5,7 @@ import { nominationsApi } from '@/api/nominations';
 import { contestsApi } from '@/api/contests';
 import { Application, Nomination, Contest, ApplicationStatus, APPLICATION_STATUS_LABELS } from '@/types';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 
 const LIMIT = 20;
 const STATUSES: ApplicationStatus[] = ['draft','submitted','accepted','rejected','admitted','winner','runner_up'];
@@ -16,7 +17,7 @@ function TableSkeleton() {
     <tbody>
       {Array.from({ length: 10 }).map((_, i) => (
         <tr key={i} className="border-b border-gray-50">
-          {Array.from({ length: 8 }).map((_, j) => (
+          {Array.from({ length: 9 }).map((_, j) => (
             <td key={j} className="px-5 py-3"><div className="h-4 bg-gray-200 rounded animate-pulse" /></td>
           ))}
         </tr>
@@ -26,6 +27,7 @@ function TableSkeleton() {
 }
 
 export function ApplicationsListPage() {
+  const { map: unread } = useUnreadMessages();
   useEffect(() => { document.title = 'Заявки — Конкурс СочиГУ'; }, []);
   const [apps, setApps] = useState<Application[]>([]);
   const [total, setTotal] = useState(0);
@@ -105,13 +107,13 @@ export function ApplicationsListPage() {
         <table className="w-full text-sm min-w-[700px]">
           <thead>
             <tr className="text-left text-gray-400 text-xs uppercase border-b border-gray-100">
-              {['#','Название проекта','Участник','Вуз','Номинация','Статус','Дата','Действия'].map(h => <th key={h} className="px-5 py-3 font-medium">{h}</th>)}
+              {['#','Название проекта','Участник','Вуз','Номинация','Статус','Дата','Сообщения','Действия'].map(h => <th key={h} className="px-5 py-3 font-medium">{h}</th>)}
             </tr>
           </thead>
           {loading ? <TableSkeleton /> : (
             <tbody className="divide-y divide-gray-50">
               {apps.length === 0 ? (
-                <tr><td colSpan={8} className="text-center py-12 text-gray-400">Заявок не найдено</td></tr>
+                <tr><td colSpan={9} className="text-center py-12 text-gray-400">Заявок не найдено</td></tr>
               ) : apps.map((app, idx) => (
                 <tr key={app.id} className="hover:bg-gray-50">
                   <td className="px-5 py-3 text-gray-400">{(page-1)*LIMIT+idx+1}</td>
@@ -121,6 +123,13 @@ export function ApplicationsListPage() {
                   <td className="px-5 py-3 text-gray-500">{app.nomination?.shortName ?? app.nomination?.name ?? '—'}</td>
                   <td className="px-5 py-3"><StatusBadge status={app.status} /></td>
                   <td className="px-5 py-3 text-gray-400">{app.submittedAt ? formatDate(app.submittedAt) : '—'}</td>
+                  <td className="px-5 py-3">
+                    {unread[app.id] > 0 ? (
+                      <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground">
+                        {unread[app.id]}
+                      </span>
+                    ) : <span className="text-gray-300">—</span>}
+                  </td>
                   <td className="px-5 py-3"><Link to={`/admin/applications/${app.id}`} className="text-primary-700 hover:underline font-medium">Просмотр</Link></td>
                 </tr>
               ))}

@@ -5,6 +5,9 @@ import { useAuthStore } from '@/store/auth.store';
 import { LayoutDashboard, FileText, LogOut } from 'lucide-react';
 import logo from '@/logo.png';
 import { ScrollToTop } from '@/components/shared/ScrollToTop';
+import { useUnreadMessages } from "@/hooks/useUnreadMessages";
+
+
 
 const sidebarLinks = [
   { to: '/cabinet', label: 'Обзор', icon: LayoutDashboard, exact: true },
@@ -15,6 +18,7 @@ export function CabinetLayout() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const { total: unreadTotal } = useUnreadMessages();
 
   const handleLogout = () => { logout(); navigate('/'); };
 
@@ -49,6 +53,14 @@ export function CabinetLayout() {
                   }`}>
                   <link.icon size={18} />
                   {link.label}
+                  {link.to === '/cabinet/application' && unreadTotal > 0 && (
+                    <span
+                      title="Непрочитанные сообщения"
+                      className="ml-auto inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground"
+                    >
+                      {unreadTotal}
+                    </span>
+                  )}
                 </Link>
               );
             })}

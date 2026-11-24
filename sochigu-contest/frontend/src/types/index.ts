@@ -351,3 +351,25 @@ export interface ScoreMatrix {
   projects: { id: string; projectTitle: string; nomination: string | null }[];
   scores: Score[];
 }
+
+export type MessageAuthorKind = 'participant' | 'staff' | 'system';
+
+export interface ApplicationMessage {
+  id: string;
+  text: string;
+  kind: 'message' | 'status';
+  createdAt: string;
+  authorKind: MessageAuthorKind;
+  // Подпись для участника: «Эксперт», «Организатор» и т.п., без имени
+  authorLabel: string;
+  // Сообщение написал текущий пользователь
+  isMine: boolean;
+  // Только для персонала (эксперт, модератор, админ)
+  isInternal?: boolean;
+  authorName?: string | null;
+}
+
+// { [applicationId]: число непрочитанных сообщений }
+export type UnreadMap = Record<string, number>;
+
+export const MESSAGE_MAX_LENGTH = 2000;

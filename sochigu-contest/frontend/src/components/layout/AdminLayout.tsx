@@ -1,6 +1,7 @@
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
 import { BackToTopButton } from '@/components/shared/BackToTopButton';
+import { useUnreadMessages } from "@/hooks/useUnreadMessages";
 import {
   LayoutDashboard,
   FileText,
@@ -41,6 +42,8 @@ export function AdminLayout() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const hasMessages = !!user && ['admin', 'moderator', 'expert'].includes(user.role);
+  const { total: unreadTotal } = useUnreadMessages(hasMessages);
 
   const handleLogout = () => { logout(); navigate('/'); };
 
@@ -79,6 +82,14 @@ export function AdminLayout() {
                 }`}>
                 <link.icon size={18} />
                 {link.label}
+                {link.to === '/admin/applications' && unreadTotal > 0 && (
+                  <span
+                    title="Непрочитанные сообщения"
+                    className="ml-auto inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground"
+                  >
+                    {unreadTotal}
+                  </span>
+                )}
               </Link>
             );
           })}
