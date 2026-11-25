@@ -33,21 +33,24 @@ export function ScoreMatrixTable({
 
   return (
     <div className="overflow-x-auto bg-white rounded-xl border border-gray-100 shadow-sm">
-      <table className="w-full text-sm border-separate border-spacing-0">
+      <table className="w-full text-xs border-separate border-spacing-0">
         <thead>
           <tr className="bg-gray-50 text-left text-gray-500">
-            <th className="sticky left-0 z-20 bg-gray-50 border-b border-r border-gray-100 px-4 py-3 font-medium min-w-[220px]">
+            <th className="sticky left-0 z-20 bg-gray-50 border-b border-r border-gray-100 px-3 py-2 font-medium min-w-[180px]">
               Проект
             </th>
-            <th className="border-b border-gray-100 px-4 py-3 font-medium min-w-[160px]">
+            <th className="border-b border-gray-100 px-3 py-2 font-medium min-w-[110px]">
               Номинация
             </th>
             {experts.map((e) => (
               <th
                 key={e.id}
-                className="border-b border-gray-100 px-4 py-3 font-medium text-center whitespace-nowrap"
+                className="border-b border-gray-100 px-1 py-2 font-medium text-center align-bottom"
               >
-                {e.lastName} {e.firstName}
+                {/* Имя эксперта вертикально, читается снизу вверх */}
+                <div className="mx-auto whitespace-nowrap rotate-180 [writing-mode:vertical-rl]">
+                  {e.lastName} {e.firstName}
+                </div>
               </th>
             ))}
           </tr>
@@ -55,30 +58,37 @@ export function ScoreMatrixTable({
         <tbody>
           {projects.map((p) => (
             <tr key={p.id} className="group">
-              <td className="sticky left-0 z-10 bg-white group-hover:bg-gray-50 border-b border-r border-gray-100 px-4 py-3 font-medium text-gray-800">
-                {p.projectTitle}
+              <td className="sticky left-0 z-10 bg-white group-hover:bg-gray-50 border-b border-r border-gray-100 px-3 py-1.5 font-medium text-gray-800">
+                <div className="max-w-[220px] truncate" title={p.projectTitle}>
+                  {p.projectTitle}
+                </div>
               </td>
-              <td className="border-b border-gray-100 px-4 py-3 text-gray-600">
-                {p.nomination ?? "—"}
+              <td className="border-b border-gray-100 px-3 py-1.5 text-gray-600">
+                <div
+                  className="max-w-[150px] truncate"
+                  title={p.nomination ?? undefined}
+                >
+                  {p.nomination ?? "—"}
+                </div>
               </td>
               {experts.map((e) => {
                 const score = scoreMap.get(cellKey(p.id, e.id));
                 return (
                   <td
                     key={e.id}
-                    className="border-b border-gray-100 px-4 py-3 text-center whitespace-nowrap"
+                    className="border-b border-gray-100 px-1 py-1.5 text-center whitespace-nowrap"
                   >
                     {score ? (
                       <button
                         type="button"
                         onClick={() => onCellClick(p, e, score)}
-                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold text-primary-900 hover:bg-primary-50 transition-colors"
+                        className="inline-flex items-center gap-0.5 rounded px-1 py-0.5 font-semibold text-primary-900 hover:bg-primary-50 transition-colors"
                       >
                         {score.points}%
                         {(score.qualities.length > 0 ||
                           score.specialOpinion) && (
                           <MessageSquare
-                            size={12}
+                            size={10}
                             className="text-gray-400"
                             aria-label="Есть качества или особое мнение"
                           />
