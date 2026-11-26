@@ -171,7 +171,7 @@ export class ScoresService {
       })),
       { header: "Оценок", key: "count", width: 10 },
       { header: "Сумма баллов", key: "sum", width: 14 },
-      { header: "Средний балл", key: "avg", width: 14 },
+      // { header: "Средний балл", key: "avg", width: 14 },
     ];
 
     projects.forEach((p, i) => {

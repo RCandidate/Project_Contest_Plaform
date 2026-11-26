@@ -71,9 +71,9 @@ export function ScoreMatrixTable({
             <th className="border-b border-l border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
               Сумма
             </th>
-            <th className="border-b border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
+            {/* <th className="border-b border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
               Средний балл
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody>
@@ -124,13 +124,13 @@ export function ScoreMatrixTable({
               <td className="border-b border-l border-gray-100 px-3 py-1.5 text-center font-semibold text-gray-800 whitespace-nowrap">
                 {totals.get(p.id)?.avg != null ? totals.get(p.id)?.sum : "—"}
               </td>
-              <td className="border-b border-gray-100 px-3 py-1.5 text-center font-semibold text-gray-800 whitespace-nowrap">
+              {/* <td className="border-b border-gray-100 px-3 py-1.5 text-center font-semibold text-gray-800 whitespace-nowrap">
                 {totals.get(p.id)?.avg != null
                   ? totals.get(p.id)?.avg?.toLocaleString("ru-RU", {
                       maximumFractionDigits: 2,
                     })
                   : "—"}
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
