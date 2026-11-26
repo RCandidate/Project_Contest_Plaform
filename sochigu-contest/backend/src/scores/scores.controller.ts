@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Put, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Put,
+  Query,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
+import { Response } from "express";
 import { ScoresService } from "./scores.service";
 import { UpsertScoreDto } from "./dto/upsert-score.dto";
 import { GetScoresMatrixDto } from "./dto/get-scores-matrix.dto";
@@ -37,6 +46,26 @@ export class ScoresController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   getMatrix(@Query() query: GetScoresMatrixDto) {
-    return this.service.getMatrix(query.contestId);
+    return this.service.getMatrix(query.contestId, query.stage === "2" ? 2 : 1);
+  }
+
+  @Get("matrix/export")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async exportMatrix(
+    @Query() query: GetScoresMatrixDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const stage = query.stage === "2" ? 2 : 1;
+    const buffer = await this.service.exportMatrixToExcel(
+      query.contestId,
+      stage,
+    );
+    res.set({
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": `attachment; filename="scores-stage${stage}-${Date.now()}.xlsx"`,
+    });
+    res.send(buffer);
   }
 }

@@ -30,7 +30,22 @@ export function ScoreMatrixTable({
     for (const s of scores) map.set(cellKey(s.applicationId, s.expertId), s);
     return map;
   }, [scores]);
-
+  const totals = useMemo(() => {
+    const map = new Map<string, { sum: number; avg: number | null }>();
+    for (const p of projects) {
+      const points = experts
+        .map((e) => scoreMap.get(cellKey(p.id, e.id))?.points)
+        .filter((v): v is number => typeof v === "number");
+      const sum = points.reduce((a, b) => a + b, 0);
+      map.set(p.id, {
+        sum,
+        avg: points.length
+          ? Math.round((sum / points.length) * 100) / 100
+          : null,
+      });
+    }
+    return map;
+  }, [projects, experts, scoreMap]);
   return (
     <div className="overflow-x-auto bg-white rounded-xl border border-gray-100 shadow-sm">
       <table className="w-full text-xs border-separate border-spacing-0">
@@ -53,6 +68,12 @@ export function ScoreMatrixTable({
                 </div>
               </th>
             ))}
+            <th className="border-b border-l border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
+              Сумма
+            </th>
+            <th className="border-b border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
+              Средний балл
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -100,6 +121,16 @@ export function ScoreMatrixTable({
                   </td>
                 );
               })}
+              <td className="border-b border-l border-gray-100 px-3 py-1.5 text-center font-semibold text-gray-800 whitespace-nowrap">
+                {totals.get(p.id)?.avg != null ? totals.get(p.id)?.sum : "—"}
+              </td>
+              <td className="border-b border-gray-100 px-3 py-1.5 text-center font-semibold text-gray-800 whitespace-nowrap">
+                {totals.get(p.id)?.avg != null
+                  ? totals.get(p.id)?.avg?.toLocaleString("ru-RU", {
+                      maximumFractionDigits: 2,
+                    })
+                  : "—"}
+              </td>
             </tr>
           ))}
         </tbody>
