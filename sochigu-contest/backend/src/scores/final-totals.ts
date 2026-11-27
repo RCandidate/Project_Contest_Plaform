@@ -70,12 +70,8 @@ export function projectFinalTotal(expertTotals: number[]): number | null {
       ? sum
       : sum / expertTotals.length,
   );
-  <div className="flex max-w-[260px] items-center gap-1.5">
-                  {showPlace && p.place ? <PlaceBadge place={p.place} /> : null}
-                  <span className="truncate" title={p.projectTitle}>
-                    {p.projectTitle}
-                  </span>
-                </div>
+  }
+
 export function rankRows<
   T extends { projectTitle: string; nomination: string | null; total: number | null },
 >(
@@ -113,4 +109,4 @@ export function rankRows<
     return { ...r, rank };
   });
 }
-}
+

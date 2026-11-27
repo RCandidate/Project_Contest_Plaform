@@ -21,14 +21,14 @@ const STATUS_LABELS: Record<string, string> = {
   winner: 'Победитель',
   runner_up: 'Призёр',
 };
+const PLACE_STATUSES = [
+  ApplicationStatus.ADMITTED,
+  ApplicationStatus.WINNER,
+  ApplicationStatus.RUNNER_UP,
+];
 
 @Injectable()
 export class ApplicationsService {
-  const PLACE_STATUSES = [
-    ApplicationStatus.ADMITTED,
-    ApplicationStatus.WINNER,
-    ApplicationStatus.RUNNER_UP,
-  ];
   private readonly logger = new Logger(ApplicationsService.name);
 
   constructor(
