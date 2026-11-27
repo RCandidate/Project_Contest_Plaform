@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { scoresApi } from "@/api/scores";
 import { contestsApi } from "@/api/contests";
-import { Contest, Score, ScoreMatrix, ScoreQuality } from "@/types";
+import {
+  Contest,
+  FinalMatrixCell,
+  Score,
+  ScoreMatrix,
+  ScoreQuality,
+} from "@/types";
 import { Spinner } from "@/components/shared/Spinner";
 import { Alert } from "@/components/ui/Alert";
 import { Modal } from "@/components/ui/Modal";
@@ -13,11 +19,23 @@ import {
   MatrixProject,
 } from "@/components/admin/scores/ScoreMatrixTable";
 import { ScoreChart } from "@/components/admin/scores/ScoresChart";
+import {
+  FinalScoreMatrixTable,
+  FinalBreakdown,
+  FinalMatrixExpert,
+  FinalMatrixProject,
+} from "@/components/admin/scores/FinalScoreMatrixTable";
 
 interface Selected {
   project: MatrixProject;
   expert: MatrixExpert;
   score: Score;
+}
+
+interface FinalSelected {
+  project: FinalMatrixProject;
+  expert: FinalMatrixExpert;
+  cell: FinalMatrixCell;
 }
 
 export function ScoresMatrixPage() {
@@ -34,6 +52,9 @@ export function ScoresMatrixPage() {
   const [error, setError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
   const [selected, setSelected] = useState<Selected | null>(null);
+  const [finalSelected, setFinalSelected] = useState<FinalSelected | null>(
+    null,
+  );
   const [view, setView] = useState<"table" | "chart">("table");
   const [stage, setStage] = useState<1 | 2>(1);
   const [exporting, setExporting] = useState(false);
@@ -153,7 +174,7 @@ export function ScoresMatrixPage() {
         {stage === 2 && (
           <p className="text-sm text-gray-500">
             Проекты со статусом «Допущена к очному этапу», «Победитель» и
-            «Призёр». Оценки второго этапа пока не подключены.
+            «Призёр». Эксперт оценивает по любым критериям, сумма не более 200.
           </p>
         )}
       </div>
@@ -187,7 +208,9 @@ export function ScoresMatrixPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div
               role="tablist"
-              className="inline-flex rounded-lg border border-gray-200 bg-white p-1"
+              className={`inline-flex rounded-lg border border-gray-200 bg-white p-1 ${
+                stage === 2 ? "invisible" : ""
+              }`}
             >
               {(
                 [
@@ -222,12 +245,22 @@ export function ScoresMatrixPage() {
             </button>
           </div>
 
-          {view === "table" ? (
+          {stage === 2 ? (
+            <FinalScoreMatrixTable
+              experts={matrix.experts}
+              projects={matrix.projects}
+              cells={matrix.finalScores ?? []}
+              conflicts={matrix.conflicts ?? []}
+              onCellClick={(project, expert, cell) =>
+                setFinalSelected({ project, expert, cell })
+              }
+            />
+          ) : view === "table" ? (
             <ScoreMatrixTable
               experts={matrix.experts}
               projects={matrix.projects}
               scores={matrix.scores}
-              showPlace={stage === 2}
+              showPlace={false}
               onCellClick={(project, expert, score) =>
                 setSelected({ project, expert, score })
               }
@@ -295,6 +328,33 @@ export function ScoresMatrixPage() {
               </dd>
             </div>
           </dl>
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={!!finalSelected}
+        onClose={() => setFinalSelected(null)}
+        title="Оценка очного этапа"
+      >
+        {finalSelected && (
+          <div className="space-y-3 text-sm">
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-20 flex-shrink-0">Эксперт</span>
+              <span className="text-gray-800 font-medium">
+                {finalSelected.expert.lastName} {finalSelected.expert.firstName}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-gray-400 w-20 flex-shrink-0">Проект</span>
+              <span className="text-gray-800 font-medium">
+                {finalSelected.project.projectTitle}
+              </span>
+            </div>
+            <FinalBreakdown
+              project={finalSelected.project}
+              cell={finalSelected.cell}
+            />
+          </div>
         )}
       </Modal>
     </div>

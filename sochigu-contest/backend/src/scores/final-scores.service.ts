@@ -14,6 +14,7 @@ import { ApplicationStatus } from "../common/enums/application-status.enum";
 import { Role } from "../common/enums/role.enum";
 import {
   FINAL_CRITERIA_BY_CODE,
+  FINAL_MAX_TOTAL,
   ScoreCriterion,
   criteriaForNomination,
   scaleForNomination,
@@ -49,7 +50,8 @@ export class FinalScoresService {
       where: { id: applicationId, status: Not(ApplicationStatus.DRAFT) },
       relations: { nomination: true },
     });
-    if (!app) throw new NotFoundException("Заявка не найдена или ещё не подана");
+    if (!app)
+      throw new NotFoundException("Заявка не найдена или ещё не подана");
     return app;
   }
 
@@ -215,6 +217,11 @@ export class FinalScoresService {
         );
       clean[code] = raw;
     }
+    const sum = Object.values(clean).reduce((a, b) => a + b, 0);
+    if (sum > FINAL_MAX_TOTAL)
+      throw new BadRequestException(
+        `Сумма баллов по всем критериям не может быть больше ${FINAL_MAX_TOTAL}`,
+      );
     return clean;
   }
 }

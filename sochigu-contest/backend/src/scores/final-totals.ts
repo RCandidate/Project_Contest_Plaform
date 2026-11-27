@@ -1,7 +1,7 @@
 import {
+  FINAL_MAX_TOTAL,
   FINAL_SCORING_RULES,
   criteriaForNomination,
-  scaleForNomination,
 } from "./score-criteria";
 
 export interface ExpertFinalTotals {
@@ -21,47 +21,32 @@ export function expertFinalTotals(
   nomination?: NominationLike | null,
 ): ExpertFinalTotals {
   const criteria = criteriaForNomination(nomination);
-  const hasNominationScale = scaleForNomination(nomination) !== null;
 
   let general = 0;
-  let nominationSum = 0;
-  let generalFilled = 0;
-  let nominationFilled = 0;
+  let other = 0;
+  let filled = 0;
+  let otherFilled = 0;
   for (const c of criteria) {
     const value = items?.[c.code];
     if (typeof value !== "number") continue;
+    filled++;
     if (c.scale === "general") {
       general += value;
-      generalFilled++;
     } else {
-      nominationSum += value;
-      nominationFilled++;
+      other += value;
+      otherFilled++;
     }
-  }
-
-  let total: number;
-  switch (FINAL_SCORING_RULES.scalesCombine) {
-    case "general_only":
-      total = general;
-      break;
-    case "average": {
-      const scales = (generalFilled > 0 ? 1 : 0) + (nominationFilled > 0 ? 1 : 0);
-      total = scales > 0 ? (general + nominationSum) / scales : 0;
-      break;
-    }
-    default:
-      total = general + nominationSum;
   }
 
   return {
     general,
-    nomination: hasNominationScale ? nominationSum : null,
-    total: round2(total),
-    filled: generalFilled + nominationFilled,
+    // сумма по бизнес- и практико-ориентированным критериям
+    nomination: otherFilled > 0 ? other : null,
+    total: round2(Math.min(general + other, FINAL_MAX_TOTAL)),
+    filled,
     of: criteria.length,
   };
 }
-
 export function projectFinalTotal(expertTotals: number[]): number | null {
   if (expertTotals.length === 0) return null;
   const sum = expertTotals.reduce((a, b) => a + b, 0);
@@ -70,15 +55,20 @@ export function projectFinalTotal(expertTotals: number[]): number | null {
       ? sum
       : sum / expertTotals.length,
   );
-  }
+}
 
 export function rankRows<
-  T extends { projectTitle: string; nomination: string | null; total: number | null },
+  T extends {
+    projectTitle: string;
+    nomination: string | null;
+    total: number | null;
+  },
 >(
   rows: T[],
   scope: "overall" | "by_nomination",
 ): (T & { rank: number | null })[] {
-  const groupOf = (r: T) => (scope === "by_nomination" ? (r.nomination ?? "") : "");
+  const groupOf = (r: T) =>
+    scope === "by_nomination" ? (r.nomination ?? "") : "";
   const sorted = [...rows].sort((a, b) => {
     const g = groupOf(a).localeCompare(groupOf(b), "ru");
     if (g !== 0) return g;
@@ -109,4 +99,3 @@ export function rankRows<
     return { ...r, rank };
   });
 }
-

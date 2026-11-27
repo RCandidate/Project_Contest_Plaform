@@ -8,14 +8,26 @@ import { getApiErrorMessage } from "@/utils/apiError";
 
 interface Props {
   applicationId: string;
+  embedded?: boolean;
 }
+
+const MAX_TOTAL = 200;
+
+const SCALE_SHORT_TITLES: Record<FinalCriterionScale, string> = {
+  general: "Общие",
+  business: "Бизнес",
+  practice: "Практико-ориентированные",
+};
+
+const formatPoints = (n: number) =>
+  n.toLocaleString("ru-RU", { maximumFractionDigits: 2 });
 
 const SCALE_ORDER: FinalCriterionScale[] = ["general", "business", "practice"];
 
 const SCALE_TITLES: Record<FinalCriterionScale, string> = {
-  general: "Общая шкала (для всех проектов)",
-  business: "Шкала бизнес-проектов",
-  practice: "Шкала практико-ориентированных проектов",
+  general: "Общие критерии (для всех проектов)",
+  business: "Критерии бизнес-проектов",
+  practice: "Критерии практико-ориентированных проектов",
 };
 
 // Пустое поле = критерий не оценён. Иначе нужно целое число от 0 до максимума.
@@ -33,7 +45,7 @@ function toFields(items?: Record<string, number>): Record<string, string> {
   );
 }
 
-export function FinalScoreForm({ applicationId }: Props) {
+export function FinalScoreForm({ applicationId, embedded = false }: Props) {
   const { showToast } = useToast();
   const [criteria, setCriteria] = useState<FinalCriterion[]>([]);
   const [conflict, setConflict] = useState(false);
@@ -93,12 +105,42 @@ export function FinalScoreForm({ applicationId }: Props) {
     (c) => (values[c.code] ?? "").trim() !== "" && !errors[c.code],
   ).length;
   const hasInvalid = criteria.some((c) => errors[c.code]);
+
+  // Живой итог: сумма по всем введённым критериям, не больше MAX_TOTAL
+  const totals = useMemo(() => {
+    const byScale = new Map<
+      FinalCriterionScale,
+      { sum: number; max: number }
+    >();
+    for (const c of criteria) {
+      const acc = byScale.get(c.scale) ?? { sum: 0, max: 0 };
+      acc.max += c.maxPoints;
+      const raw = (values[c.code] ?? "").trim();
+      if (raw !== "" && !errors[c.code]) acc.sum += Number(raw);
+      byScale.set(c.scale, acc);
+    }
+    const parts = SCALE_ORDER.filter((s) => byScale.has(s)).map((s) => ({
+      scale: s,
+      ...byScale.get(s)!,
+    }));
+    const total = parts.reduce((a, p) => a + p.sum, 0);
+    return { parts, total };
+  }, [criteria, values, errors]);
+  const overLimit = totals.total > MAX_TOTAL;
+
+  const Heading = embedded ? "h3" : "h2";
   const locked = conflict || saving;
 
   const save = async () => {
     if (hasInvalid) {
       setError(
         "Исправьте отмеченные поля: баллы — целые числа от 0 до максимума критерия",
+      );
+      return;
+    }
+    if (overLimit) {
+      setError(
+        `Сумма баллов по всем критериям не может быть больше ${MAX_TOTAL}`,
       );
       return;
     }
@@ -132,23 +174,26 @@ export function FinalScoreForm({ applicationId }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+    <div
+      className={
+        embedded
+          ? ""
+          : "bg-white rounded-xl border border-gray-100 shadow-sm p-5"
+      }
+    >
       <div className="flex items-center justify-between gap-2 mb-1">
-        <h2 className="font-semibold text-gray-900">Оценка 2-го этапа</h2>
+        <Heading className="font-semibold text-gray-900">
+          {embedded ? "Критерии очного этапа" : "Оценка 2-го этапа"}
+        </Heading>
         {!loading && !loadError && criteria.length > 0 && (
-          <span
-            className={`text-xs px-2 py-0.5 rounded-full ${
-              filledCount === criteria.length
-                ? "text-green-700 bg-green-100"
-                : "text-gray-600 bg-gray-100"
-            }`}
-          >
-            Заполнено {filledCount} из {criteria.length}
+          <span className="text-xs px-2 py-0.5 rounded-full text-gray-600 bg-gray-100">
+            Заполнено критериев: {filledCount}
           </span>
         )}
       </div>
       <p className="text-xs text-gray-400 mb-4">
-        Баллы — целые числа. Можно заполнить не все критерии и вернуться позже.
+        Баллы — целые числа. Оцените по тем критериям, которые применимы к
+        проекту. Сумма по всем критериям — не больше {MAX_TOTAL}.
       </p>
 
       {loading ? (
@@ -240,10 +285,42 @@ export function FinalScoreForm({ applicationId }: Props) {
             </div>
           ))}
 
+          {criteria.length > 0 && (
+            <div
+              className={`rounded-lg border px-3 py-2.5 text-sm ${
+                overLimit
+                  ? "bg-red-50 border-red-200"
+                  : "bg-gray-50 border-gray-100"
+              }`}
+            >
+              <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-gray-600">
+                {totals.parts.map((p) => (
+                  <span key={p.scale}>
+                    {SCALE_SHORT_TITLES[p.scale]}: {formatPoints(p.sum)} из{" "}
+                    {p.max}
+                  </span>
+                ))}
+              </div>
+              <div
+                className={`flex justify-between font-semibold mt-1 ${
+                  overLimit ? "text-red-700" : "text-gray-900"
+                }`}
+              >
+                <span>
+                  Итого за очный этап
+                  {overLimit ? " (больше допустимого)" : ""}
+                </span>
+                <span>
+                  {formatPoints(totals.total)} из {MAX_TOTAL}
+                </span>
+              </div>
+            </div>
+          )}
+
           {!conflict && criteria.length > 0 && (
             <button
               onClick={save}
-              disabled={saving}
+              disabled={saving || overLimit}
               className="px-4 py-2 bg-accent hover:bg-accent-hover disabled:opacity-60 text-accent-foreground text-sm font-semibold rounded-lg transition-colors"
             >
               {saving ? "Сохраняем..." : "Сохранить"}

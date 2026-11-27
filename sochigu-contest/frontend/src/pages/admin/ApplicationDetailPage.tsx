@@ -10,7 +10,7 @@ import { MyScoreForm } from "@/components/admin/scores/MyScoreForm";
 import { ApplicationPlaceCard } from "@/components/admin/scores/ApplicationPlaceCard";
 import { ApplicationThread } from "@/components/applications/ApplicationThread";
 import { formatSize } from '@/utils/format';
-import { FinalScoreForm } from "@/components/admin/scores/FinalScoreForm";
+import { MyStageScoreCard } from "@/components/admin/scores/MyStageScoreCard";
 
 const STATUSES: ApplicationStatus[] = ['draft','submitted','accepted','rejected','admitted','winner','runner_up'];
 
@@ -119,19 +119,24 @@ export function ApplicationDetailPage() {
           </button>
         </div>
       </div>
-      {user?.role === "expert" && FINAL_STAGE_STATUSES.includes(app.status) && (
-      <FinalScoreForm applicationId={app.id} />
-      )}
-      {user?.role === "expert" && (
-        <MyScoreForm applicationId={app.id} isDraft={app.status === "draft"} />
-      )}
+      {user?.role === "expert" &&
+        (FINAL_STAGE_STATUSES.includes(app.status) ? (
+          <MyStageScoreCard applicationId={app.id} isDraft={false} />
+        ) : (
+          <MyScoreForm
+            applicationId={app.id}
+            isDraft={app.status === "draft"}
+          />
+        ))}
 
       {user?.role === "admin" && (
         <ApplicationPlaceCard
           applicationId={app.id}
           status={app.status}
           place={app.place}
-          onSaved={(place) => setApp((prev) => (prev ? { ...prev, place } : prev))}
+          onSaved={(place) =>
+            setApp((prev) => (prev ? { ...prev, place } : prev))
+          }
         />
       )}
 

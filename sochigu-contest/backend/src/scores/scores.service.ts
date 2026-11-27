@@ -15,6 +15,7 @@ import { Role } from "../common/enums/role.enum";
 import { SCORE_QUALITIES } from "./score-qualities";
 import {
   FINAL_CRITERIA,
+  FINAL_MAX_TOTAL,
   FINAL_RATING_RULES,
   FINAL_SCORING_RULES,
   criteriaForNomination,
@@ -34,6 +35,23 @@ function isUniqueViolation(err: unknown): boolean {
   const e = err as { code?: string; driverError?: { code?: string } };
   return e?.code === "23505" || e?.driverError?.code === "23505";
 }
+
+type Stage1Matrix = {
+  experts: { id: string; firstName: string; lastName: string }[];
+  projects: {
+    id: string;
+    projectTitle: string;
+    nomination: string | null;
+    place: number | null;
+  }[];
+  scores: {
+    applicationId: string;
+    expertId: string;
+    points: number;
+    qualities: string[];
+    specialOpinion: string | null;
+  }[];
+};
 
 @Injectable()
 export class ScoresService {
@@ -112,11 +130,16 @@ export class ScoresService {
       order: { lastName: "ASC", firstName: "ASC" },
     });
 
-    const projectsQb = this.applicationRepo
-      .createQueryBuilder("a")
-      .leftJoin("a.nomination", "n")
-      .select(["a.id", "a.projectTitle", "a.place", "n.name"])
-      .where("a.status != :draft", { draft: ApplicationStatus.DRAFT });
+    const projectsQb = this.applicationRepo.createQueryBuilder("a");
+    if (stage === 2) {
+      // для 2 этапа нужен руководитель проекта (конфликт интересов)
+      projectsQb.leftJoinAndSelect("a.nomination", "n");
+    } else {
+      projectsQb
+        .leftJoin("a.nomination", "n")
+        .select(["a.id", "a.projectTitle", "a.place", "n.name"]);
+    }
+    projectsQb.where("a.status != :draft", { draft: ApplicationStatus.DRAFT });
     if (contestId)
       projectsQb.andWhere("a.contestId = :contestId", { contestId });
     if (stage === 2)
@@ -136,6 +159,8 @@ export class ScoresService {
     if (contestId) scoresQb.andWhere("a.contestId = :contestId", { contestId });
     const scores = await scoresQb.getMany();
 
+    if (stage === 2) return this.buildFinalMatrix(experts, applications);
+
     return {
       experts,
       projects: applications.map((a) => ({
@@ -145,9 +170,106 @@ export class ScoresService {
         place: a.place ?? null,
       })),
       // оценок второго этапа в системе пока нет — отдаём пустой список
-      scores: stage === 2 ? [] : scores.map((s) => this.toView(s)),
+      scores: scores.map((s) => this.toView(s)),
     };
   }
+
+  private async buildFinalMatrix(
+    experts: { id: string; firstName: string; lastName: string }[],
+    applications: Application[],
+  ) {
+    const expertById = new Map(experts.map((e) => [e.id, e]));
+    const finals = applications.length
+      ? await this.finalScoreRepo.find({
+          where: { applicationId: In(applications.map((a) => a.id)) },
+        })
+      : [];
+    const finalsByApp = new Map<string, FinalScore[]>();
+    for (const f of finals) {
+      const list = finalsByApp.get(f.applicationId) ?? [];
+      list.push(f);
+      finalsByApp.set(f.applicationId, list);
+    }
+
+    const conflicts: { applicationId: string; expertId: string }[] = [];
+    const finalScores: {
+      applicationId: string;
+      expertId: string;
+      items: Record<string, number>;
+      total: number | null;
+      filledCount: number;
+      criteriaCount: number;
+      editedByAdmin: boolean;
+      conflict: boolean;
+    }[] = [];
+
+    const projects = applications.map((a) => {
+      const criteria = criteriaForNomination(a.nomination);
+      const supervisor = supervisorText(a.supervisor);
+      for (const e of experts) {
+        if (isSupervisorConflict(e.lastName, supervisor))
+          conflicts.push({ applicationId: a.id, expertId: e.id });
+      }
+
+      const totals: number[] = [];
+      for (const f of finalsByApp.get(a.id) ?? []) {
+        const expert = expertById.get(f.expertId);
+        if (!expert) continue;
+        const conflict = isSupervisorConflict(expert.lastName, supervisor);
+        const t = expertFinalTotals(f.items, a.nomination);
+        const items: Record<string, number> = {};
+        for (const c of criteria) {
+          const v = f.items?.[c.code];
+          if (typeof v === "number") items[c.code] = v;
+        }
+        finalScores.push({
+          applicationId: a.id,
+          expertId: f.expertId,
+          items,
+          total: t.filled > 0 ? t.total : null,
+          filledCount: t.filled,
+          criteriaCount: t.of,
+          editedByAdmin: !!f.editedByUserId && f.editedByUserId !== f.expertId,
+          conflict,
+        });
+        if (!conflict && t.filled > 0) totals.push(t.total);
+      }
+
+      return {
+        id: a.id,
+        projectTitle: a.projectTitle,
+        nomination: a.nomination?.name ?? null,
+        place: a.place ?? null,
+        criteria: criteria.map((c) => ({
+          code: c.code,
+          scale: c.scale,
+          title: c.title,
+          maxPoints: c.maxPoints,
+        })),
+        maxTotal: FINAL_MAX_TOTAL,
+        total: projectFinalTotal(totals),
+        expertsCount: totals.length,
+      };
+    });
+
+    // тот же тип, что у оценок 1 этапа, иначе тип getMatrix распадается на union
+    const noStage1Scores: {
+      applicationId: string;
+      expertId: string;
+      points: number;
+      qualities: string[];
+      specialOpinion: string | null;
+    }[] = [];
+
+    return {
+      experts,
+      projects,
+      scores: noStage1Scores,
+      finalScores,
+      conflicts,
+    };
+  }
+
   async getRating(contestId?: string) {
     const experts = await this.userRepo.find({
       where: { role: Role.EXPERT },
@@ -201,12 +323,17 @@ export class ScoresService {
       const base = projectFinalTotal(expertTotals);
       const points = stage1ByApp.get(a.id) ?? [];
       const stage1Average = points.length
-        ? Math.round((points.reduce((x, y) => x + y, 0) / points.length) * 100) / 100
+        ? Math.round(
+            (points.reduce((x, y) => x + y, 0) / points.length) * 100,
+          ) / 100
         : null;
       const total =
         base === null
           ? null
-          : Math.round((base + FINAL_RATING_RULES.stage1Weight * (stage1Average ?? 0)) * 100) / 100;
+          : Math.round(
+              (base + FINAL_RATING_RULES.stage1Weight * (stage1Average ?? 0)) *
+                100,
+            ) / 100;
       return {
         applicationId: a.id,
         projectTitle: a.projectTitle,
@@ -218,7 +345,10 @@ export class ScoresService {
       };
     });
 
-    return { rows: rankRows(rows, FINAL_RATING_RULES.scope), rules: FINAL_RATING_RULES };
+    return {
+      rows: rankRows(rows, FINAL_RATING_RULES.scope),
+      rules: FINAL_RATING_RULES,
+    };
   }
   // Экспорт сводной таблицы в Excel (только admin): лист «Оценки» — матрица,
   // лист «Подробно» — по строке на каждую оценку с качествами и особым мнением
@@ -228,10 +358,10 @@ export class ScoresService {
   ): Promise<ArrayBuffer> {
     if (stage === 2) return this.exportFinalToExcel(contestId);
 
-    const { experts, projects, scores } = await this.getMatrix(
+    const { experts, projects, scores } = (await this.getMatrix(
       contestId,
       stage,
-    );
+    )) as Stage1Matrix;
     const labels = new Map(SCORE_QUALITIES.map((q) => [q.code, q.label]));
     const scoreMap = new Map(
       scores.map((s) => [`${s.applicationId}:${s.expertId}`, s]),
@@ -354,7 +484,7 @@ export class ScoresService {
     return workbook.xlsx.writeBuffer();
   }
 
-private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
+  private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
     const experts = await this.userRepo.find({
       where: { role: Role.EXPERT },
       select: { id: true, firstName: true, lastName: true },
@@ -383,12 +513,24 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
     );
     const expertName = (e: { lastName: string; firstName: string }) =>
       `${e.lastName} ${e.firstName}`.trim();
-    const grey = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE5E7EB" } } as const;
-    const yellow = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEF3C7" } } as const;
+    const grey = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FFE5E7EB" },
+    } as const;
+    const yellow = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FFFEF3C7" },
+    } as const;
     const styleHeader = (ws: ExcelJS.Worksheet, height: number) => {
       const h = ws.getRow(1);
       h.font = { bold: true };
-      h.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
+      h.alignment = {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
       h.height = height;
       h.eachCell((c) => {
         c.fill = grey;
@@ -448,7 +590,11 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
         place: a.place ?? "",
       };
       const expertTotals: number[] = [];
-      const marks: { col: number; kind: "conflict" | "admin" | "incomplete"; note?: string }[] = [];
+      const marks: {
+        col: number;
+        kind: "conflict" | "admin" | "incomplete";
+        note?: string;
+      }[] = [];
       const applicable = new Set(
         criteriaForNomination(a.nomination).map((c) => c.code),
       );
@@ -472,8 +618,6 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
         const byAdmin = !!f.editedByUserId && f.editedByUserId !== f.expertId;
         if (byAdmin) {
           marks.push({ col, kind: "admin", note: "Изменено администратором" });
-        } else if (t.filled < t.of) {
-          marks.push({ col, kind: "incomplete", note: `Заполнено ${t.filled} из ${t.of}` });
         }
 
         const detailRow: Record<string, string | number | null> = {
@@ -488,7 +632,8 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
         };
         for (const c of FINAL_CRITERIA) {
           const v = f.items?.[c.code];
-          detailRow[c.code] = applicable.has(c.code) && typeof v === "number" ? v : null;
+          detailRow[c.code] =
+            applicable.has(c.code) && typeof v === "number" ? v : null;
         }
         detail.addRow(detailRow);
       });
@@ -527,11 +672,8 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
       { header: "Параметр", key: "k", width: 34 },
       { header: "Значение", key: "v", width: 90 },
     ];
-    const scalesText = {
-      sum: "сумма баллов общей шкалы и шкалы номинации (максимум 200)",
-      average: "среднее двух шкал, считаются шкалы, где внесён хотя бы один балл (максимум 100)",
-      general_only: "только общая шкала (максимум 100)",
-    }[FINAL_SCORING_RULES.scalesCombine];
+    const scalesText =
+      "сумма всех внесённых критериев (общие, бизнес, практико-ориентированные), максимум 200";
     const expertsText = {
       average: "среднее по экспертам, оценившим проект",
       sum: "сумма по экспертам, оценившим проект",
@@ -539,9 +681,16 @@ private async exportFinalToExcel(contestId?: string): Promise<ArrayBuffer> {
     rules.addRows([
       { k: "Итог эксперта", v: scalesText },
       { k: "Итог проекта", v: expertsText },
-      { k: "Неполная оценка", v: "считается по внесённым критериям; ячейка выделена курсивом, в примечании указано, сколько критериев заполнено" },
+      {
+        header: "Итог бизнес и практико-ориентированных",
+        key: "nominationTotal",
+        width: 14,
+      },
       { k: "Жёлтая ячейка", v: "оценку последним менял администратор" },
-      { k: "«конфликт»", v: "эксперт указан руководителем проекта и не оценивает его (п. 5.5 Положения)" },
+      {
+        k: "«конфликт»",
+        v: "эксперт указан руководителем проекта и не оценивает его (п. 5.5 Положения)",
+      },
       { k: "Пустая ячейка", v: "эксперт проект не оценивал" },
       { k: "Место", v: "проставляется администратором вручную (1, 2 или 3)" },
     ]);

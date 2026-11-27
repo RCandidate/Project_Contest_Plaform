@@ -11,11 +11,16 @@ interface Props {
   applicationId: string;
   // черновики оценивать нельзя
   isDraft: boolean;
+  embedded?: boolean;
 }
 
 const OPINION_MAX = 50;
 
-export function MyScoreForm({ applicationId, isDraft }: Props) {
+export function MyScoreForm({
+  applicationId,
+  isDraft,
+  embedded = false,
+}: Props) {
   const { showToast } = useToast();
   const [qualityList, setQualityList] = useState<ScoreQuality[]>([]);
   const [points, setPoints] = useState<number | null>(null);
@@ -88,10 +93,20 @@ export function MyScoreForm({ applicationId, isDraft }: Props) {
     }
   };
 
+  const Heading = embedded ? "h3" : "h2";
+
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+    <div
+      className={
+        embedded
+          ? ""
+          : "bg-white rounded-xl border border-gray-100 shadow-sm p-5"
+      }
+    >
       <div className="flex items-center justify-between gap-2 mb-3">
-        <h2 className="font-semibold text-gray-900">Оценка 2-го этапа</h2>
+        <Heading className="font-semibold text-gray-900">
+          {embedded ? "Оценка 1-го этапа (0–100)" : "Оценка 1-го этапа"}
+        </Heading>
         {hasScore && (
           <span className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
             Оценка выставлена

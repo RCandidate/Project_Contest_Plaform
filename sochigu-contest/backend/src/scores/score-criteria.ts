@@ -98,11 +98,11 @@ export const FINAL_CRITERIA: ScoreCriterion[] = [
 export const FINAL_CRITERIA_BY_CODE: Record<string, ScoreCriterion> =
   Object.fromEntries(FINAL_CRITERIA.map((c) => [c.code, c]));
 
+export const FINAL_MAX_TOTAL = 200;
+
 export const FINAL_SCORING_RULES: {
-  scalesCombine: "sum" | "average" | "general_only";
   expertsCombine: "average" | "sum";
 } = {
-  scalesCombine: "sum",
   expertsCombine: "average",
 };
 
@@ -119,18 +119,18 @@ export function scaleForNomination(
   return null;
 }
 
+const SCALE_ORDER: CriterionScale[] = ["general", "business", "practice"];
+
+// Эксперт видит все критерии всех направлений, номинация не влияет
 export function criteriaForNomination(
-  nomination?: { shortName?: string | null; name?: string | null } | null,
+  _nomination?: { shortName?: string | null; name?: string | null } | null,
 ): ScoreCriterion[] {
-  const scale = scaleForNomination(nomination);
-  return FINAL_CRITERIA.filter(
-    (c) => c.scale === "general" || c.scale === scale,
-  ).sort((a, b) => {
-    if (a.scale !== b.scale) return a.scale === "general" ? -1 : 1;
+  return [...FINAL_CRITERIA].sort((a, b) => {
+    if (a.scale !== b.scale)
+      return SCALE_ORDER.indexOf(a.scale) - SCALE_ORDER.indexOf(b.scale);
     return a.order - b.order;
   });
 }
-
 export const FINAL_RATING_RULES: {
   scope: "overall" | "by_nomination";
   stage1Weight: number;
