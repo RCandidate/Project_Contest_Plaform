@@ -12,7 +12,7 @@ export const applicationsApi = {
   updateStatus: (id: string, data: { status: ApplicationStatus; comment?: string }) =>
     apiClient.patch<Application>(`/applications/${id}/status`, data).then(r => r.data),
   setPlace: (id: string, place: number | null) =>
-    apiClient.patch<Application>(/applications/${id}/place, { place }).then(r => r.data),
+    apiClient.patch<Application>(`/applications/${id}/place`, { place }).then(r => r.data),
   deleteApp: (id: string) => apiClient.delete(`/applications/${id}`).then(r => r.data),
   withdraw: (id: string) => apiClient.post(`/applications/${id}/withdraw`).then(r => r.data),
   uploadFile: (applicationId: string, file: File, category: string) => {

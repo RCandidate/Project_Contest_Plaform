@@ -8,10 +8,10 @@ const STYLES: Record<number, string> = {
 export function PlaceBadge({ place }: { place: number }) {
   return (
     <span
-      title={Присвоено место: ${place}}
-      className={inline-flex flex-shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap ${
+      title={`Присвоено мест: ${place}`}
+      className={`inline-flex flex-shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap ${
         STYLES[place] ?? "bg-gray-100 text-gray-600"
-      }}
+      }`}
     >
       {place} место
     </span>
