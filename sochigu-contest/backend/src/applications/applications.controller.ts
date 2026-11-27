@@ -6,6 +6,7 @@ import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
+import { UpdatePlaceDto } from './dto/update-place.dto';
 import { GetApplicationsDto } from './dto/get-applications.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -81,6 +82,13 @@ export class ApplicationsController {
     @Body() dto: UpdateStatusDto,
   ) {
     return this.service.updateStatus(id, adminId, dto);
+  }
+
+  @Patch(":id/place")
+    @UseGuards(RolesGuard)
+    @Roles(Role.ADMIN)
+    setPlace(@Param("id") id: string, @Body() dto: UpdatePlaceDto) {
+      return this.service.setPlace(id, dto.place);
   }
 
   @Delete(":id")

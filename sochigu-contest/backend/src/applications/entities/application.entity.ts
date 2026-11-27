@@ -8,6 +8,7 @@ import {
   OneToMany,
   JoinColumn,
   Index,
+  Check,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Nomination } from '../../nominations/entities/nomination.entity';
@@ -16,6 +17,7 @@ import { ApplicationStatus } from '../../common/enums/application-status.enum';
 import { ApplicationLog } from './application-log.entity';
 import { AppFile } from '../../files/entities/file.entity';
 
+@Check('"place" IS NULL OR ("place" >= 1 AND "place" <= 3)')
 @Entity('applications')
 export class Application {
   @PrimaryGeneratedColumn('uuid')
@@ -70,6 +72,9 @@ export class Application {
 
   @Column({ type: 'text', nullable: true })
   adminComment: string;
+
+  @Column({ type: 'int', nullable: true })
+  place: number | null;
 
   @Column({ nullable: true })
   submittedAt: Date | null;

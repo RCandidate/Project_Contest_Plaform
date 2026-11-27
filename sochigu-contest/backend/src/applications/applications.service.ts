@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as ExcelJS from 'exceljs';
@@ -24,6 +24,11 @@ const STATUS_LABELS: Record<string, string> = {
 
 @Injectable()
 export class ApplicationsService {
+  const PLACE_STATUSES = [
+    ApplicationStatus.ADMITTED,
+    ApplicationStatus.WINNER,
+    ApplicationStatus.RUNNER_UP,
+  ];
   private readonly logger = new Logger(ApplicationsService.name);
 
   constructor(
@@ -143,6 +148,17 @@ export class ApplicationsService {
     return app;
   }
 
+  async setPlace(id: string, place: number | null) {
+    const app = await this.repo.findOne({ where: { id } });
+    if (!app) throw new NotFoundException();
+    if (place !== null && !PLACE_STATUSES.includes(app.status)) {
+      throw new BadRequestException('Место можно присвоить только проекту очного этапа');
+    }
+    app.place = place;
+    await this.repo.save(app);
+    return this.findById(id);
+  }
+
   async updateStatus(id: string, adminId: string, dto: UpdateStatusDto) {
     const app = await this.findById(id);
     const prev = app.status;
@@ -161,7 +177,7 @@ export class ApplicationsService {
         this.logger.error("Ошибка записи сообщения о смене статуса:", err);
       }
     }
-    
+
     this.mailService
       .sendStatusUpdate(app)
       .catch((err) =>

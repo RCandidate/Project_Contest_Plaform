@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { MessageSquare } from "lucide-react";
 import { Score, ScoreMatrix } from "@/types";
+import { PlaceBadge } from "@/components/admin/scores/PlaceBadge";
 
 export type MatrixExpert = ScoreMatrix["experts"][number];
 export type MatrixProject = ScoreMatrix["projects"][number];
@@ -9,6 +10,7 @@ interface Props {
   experts: MatrixExpert[];
   projects: MatrixProject[];
   scores: Score[];
+  showPlace?: boolean;
   onCellClick: (
     project: MatrixProject,
     expert: MatrixExpert,
@@ -23,6 +25,7 @@ export function ScoreMatrixTable({
   experts,
   projects,
   scores,
+  showPlace = false,
   onCellClick,
 }: Props) {
   const scoreMap = useMemo(() => {
@@ -80,8 +83,11 @@ export function ScoreMatrixTable({
           {projects.map((p) => (
             <tr key={p.id} className="group">
               <td className="sticky left-0 z-10 bg-white group-hover:bg-gray-50 border-b border-r border-gray-100 px-3 py-1.5 font-medium text-gray-800">
-                <div className="max-w-[220px] truncate" title={p.projectTitle}>
-                  {p.projectTitle}
+                <div className="flex max-w-[260px] items-center gap-1.5">
+                  {showPlace && p.place ? <PlaceBadge place={p.place} /> : null}
+                  <span className="truncate" title={p.projectTitle}>
+                    {p.projectTitle}
+                  </span>
                 </div>
               </td>
               <td className="border-b border-gray-100 px-3 py-1.5 text-gray-600">

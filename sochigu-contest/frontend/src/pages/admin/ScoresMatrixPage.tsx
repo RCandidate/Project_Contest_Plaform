@@ -227,6 +227,7 @@ export function ScoresMatrixPage() {
               experts={matrix.experts}
               projects={matrix.projects}
               scores={matrix.scores}
+              showPlace={stage === 2}
               onCellClick={(project, expert, score) =>
                 setSelected({ project, expert, score })
               }

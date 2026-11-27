@@ -92,6 +92,7 @@ export interface Application {
   supervisor?: Supervisor;
   status: ApplicationStatus;
   adminComment?: string;
+  place?: number | null;
   submittedAt?: string;
   files?: AppFile[];
   logs?: ApplicationLog[];
@@ -346,10 +347,39 @@ export interface Score {
   specialOpinion: string | null;
 }
 
+export interface FinalMatrixCriterion {
+  code: string;
+  scale: string;
+  title: string;
+  maxPoints: number;
+}
+
+export interface FinalMatrixCell {
+  applicationId: string;
+  expertId: string;
+  items: Record<string, number>;
+  total: number | null;
+  filledCount: number;
+  criteriaCount: number;
+  editedByAdmin: boolean;
+  conflict: boolean;
+}
+
 export interface ScoreMatrix {
   experts: { id: string; firstName: string; lastName: string }[];
-  projects: { id: string; projectTitle: string; nomination: string | null }[];
+  projects: {
+    id: string;
+    projectTitle: string;
+    nomination: string | null;
+    place?: number | null;
+    criteria?: FinalMatrixCriterion[];
+    maxTotal?: number;
+    total?: number | null;
+    expertsCount?: number;
+  }[];
   scores: Score[];
+  finalScores?: FinalMatrixCell[];
+  conflicts?: { applicationId: string; expertId: string }[];
 }
 
 export type MessageAuthorKind = 'participant' | 'staff' | 'system';
@@ -373,3 +403,37 @@ export interface ApplicationMessage {
 export type UnreadMap = Record<string, number>;
 
 export const MESSAGE_MAX_LENGTH = 2000;
+
+// ─── Оценка очного этапа ─────────────────────────────────────────────────────
+
+export type FinalCriterionScale = "general" | "business" | "practice";
+
+export interface FinalCriterion {
+  code: string;
+  scale: FinalCriterionScale;
+  title: string;
+  maxPoints: number;
+  order: number;
+}
+
+/** Ответ GET /scores/final/application/:id (контракт B) */
+export interface FinalFormData {
+  applicationId: string;
+  projectTitle?: string;
+  status?: string;
+  canScore?: boolean;
+  nominationScale: FinalCriterionScale | null;
+  conflict: boolean;
+  criteria: FinalCriterion[];
+  score: FinalScore | null;
+}
+
+export interface FinalScore {
+  applicationId: string;
+  expertId: string;
+  items: Record<string, number>;
+  filledCount?: number;
+  criteriaCount?: number;
+  editedByAdmin?: boolean;
+  updatedAt?: string | null;
+}

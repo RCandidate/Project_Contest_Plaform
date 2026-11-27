@@ -7,8 +7,10 @@ import { Spinner } from '@/components/shared/Spinner';
 import { useToast } from "@/hooks/useToast";
 import { useAuthStore } from "@/store/auth.store";
 import { MyScoreForm } from "@/components/admin/scores/MyScoreForm";
+import { ApplicationPlaceCard } from "@/components/admin/scores/ApplicationPlaceCard";
 import { ApplicationThread } from "@/components/applications/ApplicationThread";
 import { formatSize } from '@/utils/format';
+import { FinalScoreForm } from "@/components/admin/scores/FinalScoreForm";
 
 const STATUSES: ApplicationStatus[] = ['draft','submitted','accepted','rejected','admitted','winner','runner_up'];
 
@@ -27,6 +29,11 @@ export function ApplicationDetailPage() {
   const [newStatus, setNewStatus] = useState<ApplicationStatus | ''>('');
   const [comment, setComment] = useState('');
   const [saving, setSaving] = useState(false);
+  const FINAL_STAGE_STATUSES: ApplicationStatus[] = [
+    "admitted",
+    "winner",
+    "runner_up",
+  ];
 
   useEffect(() => {
     if (!id) return;
@@ -112,10 +119,22 @@ export function ApplicationDetailPage() {
           </button>
         </div>
       </div>
-
+      {user?.role === "expert" && FINAL_STAGE_STATUSES.includes(app.status) && (
+      <FinalScoreForm applicationId={app.id} />
+      )}
       {user?.role === "expert" && (
         <MyScoreForm applicationId={app.id} isDraft={app.status === "draft"} />
       )}
+
+      {user?.role === "admin" && (
+        <ApplicationPlaceCard
+          applicationId={app.id}
+          status={app.status}
+          place={app.place}
+          onSaved={(place) => setApp((prev) => (prev ? { ...prev, place } : prev))}
+        />
+      )}
+
       <ApplicationThread key={app.id} applicationId={app.id} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

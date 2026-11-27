@@ -1,5 +1,12 @@
 import { apiClient } from "./client";
 import { Score, ScoreMatrix, ScoreQuality } from "@/types";
+import {
+  FinalFormData,
+  FinalScore,
+  Score,
+  ScoreMatrix,
+  ScoreQuality,
+} from "@/types";
 
 export interface UpsertScoreDto {
   applicationId: string;
@@ -8,8 +15,18 @@ export interface UpsertScoreDto {
   specialOpinion?: string;
 }
 
+export interface UpsertFinalScoreDto {
+  applicationId: string;
+  items: Record<string, number>;
+}
+
 export const scoresApi = {
   // только admin
+  saveFinalAsAdmin: (dto: {
+    applicationId: string;
+    expertId: string;
+    items: Record<string, number>;
+  }) => apiClient.put("/scores/final/admin", dto).then((r) => r.data),
   getMatrix: (contestId?: string, stage: 1 | 2 = 1) =>
     apiClient
       .get<ScoreMatrix>("/scores/matrix", {
@@ -37,4 +54,11 @@ export const scoresApi = {
   getMy: () => apiClient.get<Score[]>("/scores/my").then((r) => r.data),
   getQualities: () =>
     apiClient.get<ScoreQuality[]>("/scores/qualities").then((r) => r.data),
+  getFinalForm: (applicationId: string) =>
+  apiClient
+    .get<FinalFormData>(`/scores/final/application/${applicationId}`)
+    .then((r) => r.data),
+
+  upsertFinal: (dto: UpsertFinalScoreDto) =>
+    apiClient.put<FinalScore>("/scores/final", dto).then((r) => r.data),
 };
