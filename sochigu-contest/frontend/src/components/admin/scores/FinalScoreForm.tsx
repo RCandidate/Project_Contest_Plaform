@@ -134,7 +134,7 @@ export function FinalScoreForm({ applicationId }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
       <div className="flex items-center justify-between gap-2 mb-1">
-        <h2 className="font-semibold text-gray-900">Моя оценка очного этапа</h2>
+        <h2 className="font-semibold text-gray-900">Оценка 2-го этапа</h2>
         {!loading && !loadError && criteria.length > 0 && (
           <span
             className={`text-xs px-2 py-0.5 rounded-full ${

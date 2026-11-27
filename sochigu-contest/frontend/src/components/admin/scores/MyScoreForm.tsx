@@ -91,7 +91,7 @@ export function MyScoreForm({ applicationId, isDraft }: Props) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
       <div className="flex items-center justify-between gap-2 mb-3">
-        <h2 className="font-semibold text-gray-900">Моя оценка</h2>
+        <h2 className="font-semibold text-gray-900">Оценка 2-го этапа</h2>
         {hasScore && (
           <span className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
             Оценка выставлена
