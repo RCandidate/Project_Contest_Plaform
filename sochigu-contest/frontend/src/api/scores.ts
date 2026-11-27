@@ -2,10 +2,7 @@ import { apiClient } from "./client";
 import { Score, ScoreMatrix, ScoreQuality } from "@/types";
 import {
   FinalFormData,
-  FinalScore,
-  Score,
-  ScoreMatrix,
-  ScoreQuality,
+  FinalScore
 } from "@/types";
 
 export interface UpsertScoreDto {
