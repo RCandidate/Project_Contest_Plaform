@@ -103,7 +103,7 @@ export const FINAL_MAX_TOTAL = 200;
 export const FINAL_SCORING_RULES: {
   expertsCombine: "average" | "sum";
 } = {
-  expertsCombine: "average",
+  expertsCombine: "sum",
 };
 
 export function scaleForNomination(

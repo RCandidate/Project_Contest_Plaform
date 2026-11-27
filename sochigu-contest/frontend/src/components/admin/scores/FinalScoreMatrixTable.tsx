@@ -159,7 +159,7 @@ export function FinalScoreMatrixTable({
             <th className="border-b border-gray-100 px-3 py-2 font-medium text-center whitespace-nowrap">
               Итог
               <div className="text-[10px] font-normal text-gray-400">
-                среднее по экспертам
+                сумма по экспертам
               </div>
             </th>
           </tr>
@@ -229,7 +229,7 @@ export function FinalScoreMatrixTable({
                 {p.total != null && p.maxTotal != null && (
                   <span className="font-normal text-gray-400">
                     {" "}
-                    / {p.maxTotal}
+                    / {p.maxTotal * (p.expertsCount ?? 0)}
                   </span>
                 )}
               </td>
